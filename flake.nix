@@ -31,6 +31,7 @@
           {
             packages = with pkgs; [
               commitlint-rs
+              mdbook
               mdformat
               pre-commit
               shfmt

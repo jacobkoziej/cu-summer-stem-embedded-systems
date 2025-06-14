@@ -1,0 +1,13 @@
+[book]
+title = 'cu-summer-stem-embedded-systems'
+description = 'The Cooper Union - Summer STEM Embedded Systems: C-ing Beyond Arduino'
+authors = [
+  'Jacob Koziej',
+]
+language = 'en'
+
+[build]
+build-dir = 'build'
+
+[output.html]
+no-section-label = true
