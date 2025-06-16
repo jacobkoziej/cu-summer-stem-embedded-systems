@@ -12,5 +12,6 @@ build-dir = 'build'
 [output.html]
 edit-url-template = 'https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/edit/master/{path}'
 git-repository-url = 'https://github.com/jacobkoziej/cu-summer-stem-embedded-systems'
+hash-files = true
 no-section-label = true
 site-url = 'https://jacobkoziej.github.io/cu-summer-stem-embedded-systems/'
