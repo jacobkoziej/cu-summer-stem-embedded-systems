@@ -20,6 +20,13 @@
         };
 
         inherit (pkgs) lib;
+        inherit (pkgs) python3;
+
+        python3-pkgs = python3.withPackages (
+          ps: with ps; [
+            mdformat-footnote
+          ]
+        );
 
       in
       {
@@ -34,6 +41,7 @@
               mdbook
               mdformat
               pre-commit
+              python3-pkgs
               shfmt
               statix
               toml-sort
