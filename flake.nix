@@ -58,6 +58,12 @@
         );
 
         formatter = pkgs.nixfmt-rfc-style;
+
+        packages = rec {
+          book = pkgs.callPackage ./package.nix { };
+
+          default = book;
+        };
       }
     );
 }
