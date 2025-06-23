@@ -16,3 +16,7 @@ hash-files = true
 no-section-label = true
 site-url = 'https://jacobkoziej.github.io/cu-summer-stem-embedded-systems/'
 smart-punctuation = true
+
+[output.html.fold]
+enable = true
+level = 0
