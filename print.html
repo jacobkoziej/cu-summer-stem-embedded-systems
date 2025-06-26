@@ -39,7 +39,7 @@
             const default_dark_theme = "navy";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-4c42de40.js"></script>
+        <script src="toc-5f11caee.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -290,6 +290,7 @@ We’ll also have drop-in lessons as necessary to ensure we finish in time for t
 <p>Tentative schedule:</p>
 <ul>
 <li><strong>2025-07-07:</strong> <a href="background/hello-world.html">Hello, World!</a></li>
+<li><strong>2025-07-08:</strong> <a href="background/analog-&amp;-serial.html">Analog &amp; Serial</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="hello-world"><a class="header" href="#hello-world">Hello, World!</a></h1>
 <p><em>Getting the ball rolling with Arduino.</em></p>
@@ -359,6 +360,50 @@ We can achieve this by varying the percentage of time we power the LED.
 However, we need to perform this switching at a high enough frequency (&gt;1 kHz) so that we cannot perceive the flickering.
 Utilize a push button to create 10 different LED brightness levels along with an off state.
 The push button should cycle between increasing the brightness and turning off the LED.</p>
+</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="analog--serial"><a class="header" href="#analog--serial">Analog &amp; Serial</a></h1>
+<p><em>More interesting interactions with the world.</em></p>
+<h2 id="outline-1"><a class="header" href="#outline-1">Outline</a></h2>
+<ul>
+<li>Quantization</li>
+<li>Pulse-Width Modulation (PWM)</li>
+<li>Potentiometers</li>
+<li>Analog to Digital Conversion (ADC)</li>
+<li><a href="https://docs.arduino.cc/language-reference/en/functions/math/map/"><code>map()</code></a> function</li>
+<li>Hysteresis</li>
+<li><a href="https://docs.arduino.cc/language-reference/en/functions/communication/serial/"><code>Serial</code></a> communication:
+<ul>
+<li>RX vs TX</li>
+<li>Baud rate</li>
+<li>Parity</li>
+<li>Serialization</li>
+<li>Serial console</li>
+</ul>
+</li>
+<li>ASCII encoding</li>
+<li>RGB(A) color model</li>
+<li>RGB LEDs</li>
+<li><a href="https://docs.arduino.cc/language-reference/en/functions/communication/serial/"><code>Serial</code></a> debugging</li>
+</ul>
+<h2 id="exercises-1"><a class="header" href="#exercises-1">Exercises</a></h2>
+<ol>
+<li>
+<p>In anticipation of building your own audio amplifier, you decide to create a volume indicator.
+Using four LEDs, create a 4-bit volume indicator where a potentiometer serves as the volume knob.
+Ensure that hysteresis is added to each of the volume regions to prevent flickering of volume levels.</p>
+</li>
+<li>
+<p>Since I’m a huge Pink Floyd fan, let’s pick <a href="https://open.spotify.com/track/6FBPOJLxUZEair6x4kLDhf">Any Colour You Like</a>.
+Utilize three potentiometers to change the color of an RGB LED to any color you like.
+<strong>Optionally</strong>, add a button to dim the LED brightness by 50%.</p>
+</li>
+<li>
+<p>Since moving our hands from the keyboard is such a hassle, let’s instead utilize the serial console to control the color of the LED.
+Your code should expect a valid hex RGB value followed by a newline.
+If this value is malformed, return an error to the user with a meaningful error code; otherwise, return a success code.
+<strong>Optionally</strong>, add support for an optional alpha channel.
+If the user supplies no alpha channel, assume alpha is 100%.</p>
 </li>
 </ol>
 
