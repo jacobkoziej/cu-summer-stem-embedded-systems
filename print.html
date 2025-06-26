@@ -39,7 +39,7 @@
             const default_dark_theme = "navy";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-4e7b5ee7.js"></script>
+        <script src="toc-4c42de40.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -286,7 +286,82 @@ We’ll also have drop-in lessons as necessary to ensure we finish in time for t
 <ol class="footnote-definition"><li id="footnote-snap">
 <p>I actually got started programming Arduinos with only a background in <a href="https://snap.berkeley.edu">Snap!</a> <a href="#fr-snap-1">↩</a></p>
 </li>
+</ol><div style="break-before: page; page-break-before: always;"></div><h1 id="background-1"><a class="header" href="#background-1">Background</a></h1>
+<p>Tentative schedule:</p>
+<ul>
+<li><strong>2025-07-07:</strong> <a href="background/hello-world.html">Hello, World!</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="hello-world"><a class="header" href="#hello-world">Hello, World!</a></h1>
+<p><em>Getting the ball rolling with Arduino.</em></p>
+<h2 id="outline"><a class="header" href="#outline">Outline</a></h2>
+<ul>
+<li>The basics of Information Theory, in particular, defining entropy</li>
+<li>Working with different numeral systems:
+<ul>
+<li>Decimal, Binary, Octal, &amp; Hexadecimal</li>
+<li>Two’s complement</li>
+<li>Quick conversion between Binary, Octal, &amp; Hexadecimal</li>
+</ul>
+</li>
+<li>Circuit fundamentals:
+<ul>
+<li>Ohm’s Law</li>
+<li>Series vs Parallel</li>
+<li>Power</li>
+<li>Analog vs Digital</li>
+</ul>
+</li>
+<li>Arduino basics:
+<ul>
+<li>Using the <a href="https://docs.arduino.cc/language-reference/">language reference</a></li>
+<li><a href="https://docs.arduino.cc/language-reference/en/structure/sketch/setup/"><code>setup()</code></a> &amp; <a href="https://docs.arduino.cc/language-reference/en/structure/sketch/loop/"><code>loop()</code></a></li>
+<li>Interfacing with digital IO</li>
+<li>Delaying actions</li>
+<li>Defining variables and constants</li>
+<li>Arithmetic operations and assignment</li>
+<li><a href="https://docs.arduino.cc/language-reference/en/structure/control-structure/if/"><code>if</code></a>-<a href="https://docs.arduino.cc/language-reference/en/structure/control-structure/else/"><code>else</code></a> statements</li>
+</ul>
+</li>
+<li>Debouncing buttons</li>
+<li>Crude debugging with an LED</li>
+</ul>
+<h2 id="exercises"><a class="header" href="#exercises">Exercises</a></h2>
+<ol>
+<li>
+<p>In an attempt to absorb as much information as possible during the lesson, you suffer an exceptionally unexpected event and magically become stranded on an island with nothing but a laptop and your trusty Arduino.
+To make matters worse, it’s night, and a new moon is out.</p>
+<ol>
+<li>
+<p>Right as you’re about to start cursing your luck, you remember that the Arduino Uno Rev3 has a built-in LED, and there are some fishers about a mile out from the island.
+Using your newfound knowledge, write a program to blink SOS so that you can make it back in time for tomorrow’s lesson!</p>
+</li>
+<li>
+<p>Fortunately for you, the fishers noticed your SOS, shot a flare, and are now heading your way.
+Unfortunately, you notice unsettling noises coming from the bushes not too far from you.
+Thinking quickly, you decide to change the LED blinking pattern to be irritating and scare away anything from coming out to the beach.
+Write a program that blinks the built-in LED in a range between 50 and 500 milliseconds.
+Change the delay by 50 milliseconds every 50 milliseconds, alternating between increasing and decreasing the delay depending on whether the delay time is saturated.</p>
+</li>
+<li>
+<p>Having been rescued by the fishers, as a token of appreciation (and as a practical joke), you decide to make them a counter that keeps track of the number of fish that got away in a day.
+They only have four LEDs, some resistors, and two push buttons on board.
+Being resourceful, you build them a 4-bit, unsigned counter.
+Write a program that displays in binary the number of fish that got away.
+One button should increment the counter while the other should reset it back to zero.
+If the counter overflows, turn on the built-in LED and turn off the remaining LEDs.</p>
+</li>
 </ol>
+</li>
+<li>
+<p>Being soon-to-be broke college students, you’ll need to be resourceful with what you have on hand.
+To prepare you for this reality, let’s create a dimmable Arduino night light using the built-in LED and a push button.
+We can achieve this by varying the percentage of time we power the LED.
+However, we need to perform this switching at a high enough frequency (&gt;1 kHz) so that we cannot perceive the flickering.
+Utilize a push button to create 10 different LED brightness levels along with an off state.
+The push button should cycle between increasing the brightness and turning off the LED.</p>
+</li>
+</ol>
+
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
