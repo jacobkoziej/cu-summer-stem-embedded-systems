@@ -39,7 +39,7 @@
             const default_dark_theme = "navy";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-5f11caee.js"></script>
+        <script src="toc-b92ca634.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -291,6 +291,7 @@ We’ll also have drop-in lessons as necessary to ensure we finish in time for t
 <ul>
 <li><strong>2025-07-07:</strong> <a href="background/hello-world.html">Hello, World!</a></li>
 <li><strong>2025-07-08:</strong> <a href="background/analog-&amp;-serial.html">Analog &amp; Serial</a></li>
+<li><strong>2025-07-09:</strong> <a href="background/bit-manipulation-&amp;-lookup-tables.html">Bit Manipulation &amp; Lookup Tables</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="hello-world"><a class="header" href="#hello-world">Hello, World!</a></h1>
 <p><em>Getting the ball rolling with Arduino.</em></p>
@@ -341,7 +342,7 @@ Using your newfound knowledge, write a program to blink SOS so that you can make
 Unfortunately, you notice unsettling noises coming from the bushes not too far from you.
 Thinking quickly, you decide to change the LED blinking pattern to be irritating and scare away anything from coming out to the beach.
 Write a program that blinks the built-in LED in a range between 50 and 500 milliseconds.
-Change the delay by 50 milliseconds every 50 milliseconds, alternating between increasing and decreasing the delay depending on whether the delay time is saturated.</p>
+Change the delay by 50 milliseconds every cycle, alternating between increasing and decreasing the delay depending on whether the delay time is saturated.</p>
 </li>
 <li>
 <p>Having been rescued by the fishers, as a token of appreciation (and as a practical joke), you decide to make them a counter that keeps track of the number of fish that got away in a day.
@@ -404,6 +405,59 @@ Your code should expect a valid hex RGB value followed by a newline.
 If this value is malformed, return an error to the user with a meaningful error code; otherwise, return a success code.
 <strong>Optionally</strong>, add support for an optional alpha channel.
 If the user supplies no alpha channel, assume alpha is 100%.</p>
+</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="bit-manipulation--lookup-tables"><a class="header" href="#bit-manipulation--lookup-tables">Bit Manipulation &amp; Lookup Tables</a></h1>
+<p><em>Squeezing and pre-computing data.</em></p>
+<h2 id="outline-2"><a class="header" href="#outline-2">Outline</a></h2>
+<ul>
+<li>Standard integer types</li>
+<li>Endianness</li>
+<li>Bitwise operations:
+<ul>
+<li>AND</li>
+<li>OR</li>
+<li>XOR</li>
+<li>NOT</li>
+<li>Left shift</li>
+<li>Right shift</li>
+</ul>
+</li>
+<li>Bit masks</li>
+<li>Bit packing</li>
+<li>Enumerations</li>
+<li>Lookup tables</li>
+</ul>
+<h2 id="exercises-2"><a class="header" href="#exercises-2">Exercises</a></h2>
+<ol>
+<li>
+<p>You’re working on a parallel, serial system where you bit-bang ASCII characters on the digital IO pins of the Arduino.
+Initially, you thought about using the IO pins in sequential order to write out the ASCII value easily with a bit shift; however, being the brilliant engineer you are, you anticipate a future where someone on the hardware team asks you to change a few of the IO pins you use.
+Create a lookup table that maps the bit position in an ASCII character to an IO pin.
+Utilizing this table, display any ASCII value using 7 LEDs.</p>
+</li>
+<li>
+<p>You’re working on a communication protocol, and following some clever math over <a href="https://en.wikipedia.org/wiki/GF(2)">GF(2)</a>, you end up with a <code>uint64_t</code> where each bit represents an irrecoverable bit error.
+Since you’re working on a real-time system, you need to quickly determine if the number of bit errors is still recoverable.
+Write code that counts the number of bits set in a <code>uint64_t</code>.
+Make your code interactive by allowing a user to specify any integer over serial and reporting the number of bits set back to the user.</p>
+</li>
+<li>
+<p>Since you’re working in an embedded environment, memory is a scarce resource, making logging a headache.
+During the engineering design process, you and your team decide that you need to keep track of the occurrence of an event over the last eight time steps.
+Write code that cyclically fills a <code>uint8_t</code> where we represent the presence of an event by a set bit.
+When you press one push button, read the value of another to determine the occurrence of the event.
+<strong>Optionally</strong>, add another button that will print the last eight events over serial when pressed.
+During setup, zero the buffer to assume no events have happened.</p>
+</li>
+<li>
+<p><strong>(Challenge)</strong> When dealing with a vast amount of binary data, corruption is inevitable.
+Due to this possibility, we need a method to determine if our data has changed so that we can act accordingly.
+One method is to utilize a 32-bit <a href="https://en.wikipedia.org/wiki/Cyclic_redundancy_check">Cyclic Redundancy Check</a> (CRC-32).
+Implement a function that computes a CRC-32 given an array of <code>uint8_t</code>’s and the number of bytes using the standard IEEE polynomial of <code>0x04C11DB7</code> and initial condition of <code>0xFFFFFFFF</code>.
+<strong>Remember</strong>, endianness matters here!
+You might need to use the reversed version of the polynomial.
+Create an array with the message “cooper union” and check if your function reports a correct CRC-32.</p>
 </li>
 </ol>
 
