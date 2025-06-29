@@ -37,7 +37,7 @@
       Unfortunately, you notice unsettling noises coming from the bushes not too far from you.
       Thinking quickly, you decide to change the LED blinking pattern to be irritating and scare away anything from coming out to the beach.
       Write a program that blinks the built-in LED in a range between 50 and 500 milliseconds.
-      Change the delay by 50 milliseconds every 50 milliseconds, alternating between increasing and decreasing the delay depending on whether the delay time is saturated.
+      Change the delay by 50 milliseconds every cycle, alternating between increasing and decreasing the delay depending on whether the delay time is saturated.
 
    3. Having been rescued by the fishers, as a token of appreciation (and as a practical joke), you decide to make them a counter that keeps track of the number of fish that got away in a day.
       They only have four LEDs, some resistors, and two push buttons on board.
