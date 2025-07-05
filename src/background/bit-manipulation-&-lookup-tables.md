@@ -15,7 +15,7 @@
   - Right shift
 - Bit masks
 - Bit packing
-- Enumerations
+- `enum`erations
 - Lookup tables
 
 ## Exercises
