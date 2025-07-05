@@ -27,7 +27,11 @@ pkgs.stdenvNoCC.mkDerivation {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     mdbook build
+
+    runHook postBuild
   '';
 
   installPhase = ''
