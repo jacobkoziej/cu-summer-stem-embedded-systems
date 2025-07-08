@@ -38,6 +38,7 @@
           in
           {
             packages = with pkgs; [
+              arduino-cli
               commitlint-rs
               mdbook
               mdformat
