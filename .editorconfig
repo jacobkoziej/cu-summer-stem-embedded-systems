@@ -9,7 +9,7 @@ tab_width                = 8
 indent_style             = tab
 indent_size              = tab
 
-[*.{build,md,nix,toml,typ,yml,yaml}]
+[*.{build,ino,md,nix,toml,typ,yml,yaml}]
 indent_style = space
 indent_size  = 2
 
