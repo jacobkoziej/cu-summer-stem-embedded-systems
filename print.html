@@ -39,7 +39,7 @@
             const default_dark_theme = "navy";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-b92ca634.js"></script>
+        <script src="toc-01227eef.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -460,6 +460,41 @@ You might need to use the reversed version of the polynomial.
 Create an array with the message “cooper union” and check if your function reports a correct CRC-32.</p>
 </li>
 </ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="examples"><a class="header" href="#examples">Examples</a></h1>
+<ul>
+<li><a href="examples/button-debounce.html">Button Debounce</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="button-debounce"><a class="header" href="#button-debounce">Button Debounce</a></h1>
+<pre><code class="language-cpp">#define BUTTON      2
+#define DEBOUNCE_MS 4
+
+bool button_state;
+
+void setup(void)
+{
+  pinMode(BUTTON, INPUT);
+
+  pinMode(LED_BUILTIN, OUTPUT);
+
+  digitalWrite(LED_BUILTIN, button_state);
+}
+
+void loop(void)
+{
+  // get our initial sample of the button
+  bool button_sample = digitalRead(BUTTON);
+
+  // wait for the button to settle
+  delay(DEBOUNCE_MS);
+
+  // if the current sample is the same as the
+  // previous we assume the new button state
+  if (digitalRead(BUTTON) == button_sample)
+    button_state = button_sample;
+
+  digitalWrite(LED_BUILTIN, button_state);
+}
+</code></pre>
 
                     </main>
 
