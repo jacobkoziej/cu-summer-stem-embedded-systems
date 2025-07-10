@@ -12,3 +12,5 @@
   - [Bit Manipulation & Lookup Tables](background/bit-manipulation-&-lookup-tables.md)
 - [Examples](examples/README.md)
   - [Button Debounce](examples/button-debounce.md)
+- [How-tos](how-tos/README.md)
+  - [debugWire](how-tos/debugwire.md)
