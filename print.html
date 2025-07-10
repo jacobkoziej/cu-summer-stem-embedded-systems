@@ -39,7 +39,7 @@
             const default_dark_theme = "navy";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-01227eef.js"></script>
+        <script src="toc-a87bc5e4.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -291,7 +291,8 @@ We’ll also have drop-in lessons as necessary to ensure we finish in time for t
 <ul>
 <li><strong>2025-07-08:</strong> <a href="background/hello-world.html">Hello, World!</a></li>
 <li><strong>2025-07-09:</strong> <a href="background/analog-&amp;-serial.html">Analog &amp; Serial</a></li>
-<li><strong>2025-07-10:</strong> <a href="background/bit-manipulation-&amp;-lookup-tables.html">Bit Manipulation &amp; Lookup Tables</a></li>
+<li><strong>2025-07-10:</strong> <a href="background/debugging.html">Debugging</a></li>
+<li><strong>2025-07-14:</strong> <a href="background/bit-manipulation-&amp;-lookup-tables.html">Bit Manipulation &amp; Lookup Tables</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="hello-world"><a class="header" href="#hello-world">Hello, World!</a></h1>
 <p><em>Getting the ball rolling with Arduino.</em></p>
@@ -391,7 +392,7 @@ The push button should cycle between increasing the brightness and turning off t
 <ol>
 <li>
 <p>In anticipation of building your own audio amplifier, you decide to create a volume indicator.
-Using four LEDs, create a 4-bit volume indicator where a potentiometer serves as the volume knob.
+Using four LEDs, create a 4-LED volume indicator where a potentiometer serves as the volume knob.
 Ensure that hysteresis is added to each of the volume regions to prevent flickering of volume levels.</p>
 </li>
 <li>
@@ -407,9 +408,30 @@ If this value is malformed, return an error to the user with a meaningful error 
 If the user supplies no alpha channel, assume alpha is 100%.</p>
 </li>
 </ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="debugging"><a class="header" href="#debugging">Debugging</a></h1>
+<p><em>Squash one bug and two more may appear.</em></p>
+<h2 id="outline-2"><a class="header" href="#outline-2">Outline</a></h2>
+<ul>
+<li>Recursion</li>
+<li>debugWire</li>
+<li>Breakpoints</li>
+<li>Watchpoints</li>
+<li>Mutating memory</li>
+<li>Evaluating expressions</li>
+</ul>
+<h2 id="exercises-2"><a class="header" href="#exercises-2">Exercises</a></h2>
+<ol>
+<li>
+<p>Implement Fizz Buzz up to a number specified over the serial console.</p>
+</li>
+<li>
+<p>Create a recursive factorial function.
+This function should be able to at least successfully calculate 10 factorial.</p>
+</li>
+</ol>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="bit-manipulation--lookup-tables"><a class="header" href="#bit-manipulation--lookup-tables">Bit Manipulation &amp; Lookup Tables</a></h1>
 <p><em>Squeezing and pre-computing data.</em></p>
-<h2 id="outline-2"><a class="header" href="#outline-2">Outline</a></h2>
+<h2 id="outline-3"><a class="header" href="#outline-3">Outline</a></h2>
 <ul>
 <li>Standard integer types</li>
 <li>Endianness</li>
@@ -428,7 +450,7 @@ If the user supplies no alpha channel, assume alpha is 100%.</p>
 <li><code>enum</code>erations</li>
 <li>Lookup tables</li>
 </ul>
-<h2 id="exercises-2"><a class="header" href="#exercises-2">Exercises</a></h2>
+<h2 id="exercises-3"><a class="header" href="#exercises-3">Exercises</a></h2>
 <ol>
 <li>
 <p>You’re working on a parallel, serial system where you bit-bang ASCII characters on the digital IO pins of the Arduino.
@@ -495,6 +517,26 @@ void loop(void)
   digitalWrite(LED_BUILTIN, button_state);
 }
 </code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="how-tos"><a class="header" href="#how-tos">How-tos</a></h1>
+<ul>
+<li><a href="how-tos/debugwire.html">debugWire</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="debugwire"><a class="header" href="#debugwire">debugWire</a></h1>
+<p>You’ll need two Arduino Uno Rev3s.
+One will serve as our target, which will get debugged, while the other will act as the actual debugger.
+To make this possible, we’ll be taking advantage of <a href="https://github.com/felias-fogg/dw-link"><code>dw-link</code></a> to turn one of the Arduinos into a debugger.</p>
+<ol>
+<li>Grab the <a href="https://github.com/felias-fogg/dw-link/releases">latest release</a> of <a href="https://github.com/felias-fogg/dw-link"><code>dw-link</code></a>.
+<ol>
+<li><strong>(Optionally)</strong> Feel free to read the <a href="https://github.com/felias-fogg/dw-link/blob/master/docs/manual.md"><code>dw-link</code> manual</a>.</li>
+</ol>
+</li>
+<li>Compile and upload the sketch to your designated Arduino debugger.</li>
+<li><a href="https://github.com/MCUdude/MiniCore#how-to-install">Install</a> <a href="https://github.com/MCUdude/MiniCore">MiniCore</a> using the board manager.</li>
+<li>Set your board to be the MiniCore ATmega328, disable compiler LTO, and optimize sketches for debugging.</li>
+<li>We have already enabled debugWire on all of the target boards, so it is sufficient to connect pin 8 of the debugger board to the reset pin of the target, along with power and ground to their respective locations.</li>
+<li>Verify your sketch at least once before starting debugging.</li>
+</ol>
 
                     </main>
 

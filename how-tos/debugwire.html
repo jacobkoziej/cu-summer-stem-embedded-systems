@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Background - cu-summer-stem-embedded-systems</title>
+        <title>debugWire - cu-summer-stem-embedded-systems</title>
 
 
         <!-- Custom HTML head -->
@@ -143,7 +143,7 @@
                         <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/edit/master/src/background/README.md" title="Suggest an edit" aria-label="Suggest an edit">
+                        <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/edit/master/src/how-tos/debugwire.md" title="Suggest an edit" aria-label="Suggest an edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -172,26 +172,31 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="background"><a class="header" href="#background">Background</a></h1>
-<p>Tentative schedule:</p>
-<ul>
-<li><strong>2025-07-08:</strong> <a href="hello-world.html">Hello, World!</a></li>
-<li><strong>2025-07-09:</strong> <a href="analog-&amp;-serial.html">Analog &amp; Serial</a></li>
-<li><strong>2025-07-10:</strong> <a href="debugging.html">Debugging</a></li>
-<li><strong>2025-07-14:</strong> <a href="bit-manipulation-&amp;-lookup-tables.html">Bit Manipulation &amp; Lookup Tables</a></li>
-</ul>
+                        <h1 id="debugwire"><a class="header" href="#debugwire">debugWire</a></h1>
+<p>You’ll need two Arduino Uno Rev3s.
+One will serve as our target, which will get debugged, while the other will act as the actual debugger.
+To make this possible, we’ll be taking advantage of <a href="https://github.com/felias-fogg/dw-link"><code>dw-link</code></a> to turn one of the Arduinos into a debugger.</p>
+<ol>
+<li>Grab the <a href="https://github.com/felias-fogg/dw-link/releases">latest release</a> of <a href="https://github.com/felias-fogg/dw-link"><code>dw-link</code></a>.
+<ol>
+<li><strong>(Optionally)</strong> Feel free to read the <a href="https://github.com/felias-fogg/dw-link/blob/master/docs/manual.md"><code>dw-link</code> manual</a>.</li>
+</ol>
+</li>
+<li>Compile and upload the sketch to your designated Arduino debugger.</li>
+<li><a href="https://github.com/MCUdude/MiniCore#how-to-install">Install</a> <a href="https://github.com/MCUdude/MiniCore">MiniCore</a> using the board manager.</li>
+<li>Set your board to be the MiniCore ATmega328, disable compiler LTO, and optimize sketches for debugging.</li>
+<li>We have already enabled debugWire on all of the target boards, so it is sufficient to connect pin 8 of the debugger board to the reset pin of the target, along with power and ground to their respective locations.</li>
+<li>Verify your sketch at least once before starting debugging.</li>
+</ol>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../syllabus.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../how-tos/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../background/hello-world.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -199,13 +204,10 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../syllabus.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../how-tos/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../background/hello-world.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
-                    </a>
             </nav>
 
         </div>
