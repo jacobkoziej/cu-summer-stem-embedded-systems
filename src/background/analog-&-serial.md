@@ -24,7 +24,7 @@
 ## Exercises
 
 1. In anticipation of building your own audio amplifier, you decide to create a volume indicator.
-   Using four LEDs, create a 4-bit volume indicator where a potentiometer serves as the volume knob.
+   Using four LEDs, create a 4-LED volume indicator where a potentiometer serves as the volume knob.
    Ensure that hysteresis is added to each of the volume regions to prevent flickering of volume levels.
 
 2. Since I'm a huge Pink Floyd fan, let's pick [Any Colour You Like].
