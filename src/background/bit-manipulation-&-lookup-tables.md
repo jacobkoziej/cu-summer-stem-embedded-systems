@@ -17,8 +17,8 @@
 - Bit packing
 - `enum`erations
 - Lookup tables
-- `sizeof` operator
-- `static` storage class qualifier
+- [`sizeof`] operator
+- [`static`] storage class qualifier
 - Seven-segment displays
 
 ## Exercises
@@ -53,3 +53,5 @@
 
 [cyclic redundancy check]: https://en.wikipedia.org/wiki/Cyclic_redundancy_check
 [gf(2)]: https://en.wikipedia.org/wiki/GF(2)
+[`sizeof`]: https://docs.arduino.cc/language-reference/en/variables/utilities/sizeof/
+[`static`]: https://docs.arduino.cc/language-reference/en/variables/variable-scope-qualifiers/static/
