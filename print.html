@@ -39,7 +39,7 @@
             const default_dark_theme = "navy";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-2d018c37.js"></script>
+        <script src="toc-a3b3ab59.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -293,6 +293,7 @@ We’ll also have drop-in lessons as necessary to ensure we finish in time for t
 <li><strong>2025-07-09:</strong> <a href="background/analog-&amp;-serial.html">Analog &amp; Serial</a></li>
 <li><strong>2025-07-10:</strong> <a href="background/debugging.html">Debugging</a></li>
 <li><strong>2025-07-14:</strong> <a href="background/bit-manipulation-&amp;-lookup-tables.html">Bit Manipulation &amp; Lookup Tables</a></li>
+<li><strong>2025-07-15:</strong> <a href="background/circular-buffers.html">Circular Buffers &amp; Seven Segment Displays</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="hello-world"><a class="header" href="#hello-world">Hello, World!</a></h1>
 <p><em>Getting the ball rolling with Arduino.</em></p>
@@ -487,6 +488,24 @@ Implement a function that computes a CRC-32 given an array of <code>uint8_t</cod
 You might need to use the reversed version of the polynomial.
 Create an array with the message “cooper union” and check if your function reports a correct CRC-32.</p>
 </li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="circular-buffers"><a class="header" href="#circular-buffers">Circular Buffers</a></h1>
+<p><em>Don’t look too far ahead; you might see what you’ve left behind.</em></p>
+<h2 id="outline-4"><a class="header" href="#outline-4">Outline</a></h2>
+<ul>
+<li>Modular arithmetic</li>
+<li>Circular buffers</li>
+<li>Multiplexing</li>
+</ul>
+<h2 id="project"><a class="header" href="#project">Project</a></h2>
+<p><em>Scrolling quad seven-segment display.</em></p>
+<ol>
+<li>Create two lookup tables: one that maps seven-segment display segments to pins and another that maps digits to pins.</li>
+<li>Write a function that, given a <code>uint8_t</code> bitmask, displays it on a seven-segment digit.</li>
+<li>Write code that multiplexes between the different digits of the display.
+At this point, it should look as if all the digits are on at the same time.</li>
+<li>Write a function that, given ASCII digits, letters, or the space character, returns an index into a lookup table of associated seven-segment bitmasks.</li>
+<li>Implement a circular text buffer that can repeatedly scroll on your display.</li>
 </ol>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="examples"><a class="header" href="#examples">Examples</a></h1>
 <ul>

@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Bit Manipulation &amp; Lookup Tables - cu-summer-stem-embedded-systems</title>
+        <title>Circular Buffers - cu-summer-stem-embedded-systems</title>
 
 
         <!-- Custom HTML head -->
@@ -143,7 +143,7 @@
                         <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/edit/master/src/background/bit-manipulation-&amp;-lookup-tables.md" title="Suggest an edit" aria-label="Suggest an edit">
+                        <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/edit/master/src/background/circular-buffers.md" title="Suggest an edit" aria-label="Suggest an edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -172,75 +172,34 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="bit-manipulation--lookup-tables"><a class="header" href="#bit-manipulation--lookup-tables">Bit Manipulation &amp; Lookup Tables</a></h1>
-<p><em>Squeezing and pre-computing data.</em></p>
+                        <h1 id="circular-buffers"><a class="header" href="#circular-buffers">Circular Buffers</a></h1>
+<p><em>Don’t look too far ahead; you might see what you’ve left behind.</em></p>
 <h2 id="outline"><a class="header" href="#outline">Outline</a></h2>
 <ul>
-<li>Standard integer types</li>
-<li>Endianness</li>
-<li>Bitwise operations:
-<ul>
-<li>AND</li>
-<li>OR</li>
-<li>XOR</li>
-<li>NOT</li>
-<li>Left shift</li>
-<li>Right shift</li>
+<li>Modular arithmetic</li>
+<li>Circular buffers</li>
+<li>Multiplexing</li>
 </ul>
-</li>
-<li>Bit masks</li>
-<li>Bit packing</li>
-<li><code>enum</code>erations</li>
-<li>Lookup tables</li>
-<li><a href="https://docs.arduino.cc/language-reference/en/variables/utilities/sizeof/"><code>sizeof</code></a> operator</li>
-<li><a href="https://docs.arduino.cc/language-reference/en/variables/variable-scope-qualifiers/static/"><code>static</code></a> storage class qualifier</li>
-<li>Seven-segment displays</li>
-</ul>
-<h2 id="exercises"><a class="header" href="#exercises">Exercises</a></h2>
+<h2 id="project"><a class="header" href="#project">Project</a></h2>
+<p><em>Scrolling quad seven-segment display.</em></p>
 <ol>
-<li>
-<p>You’re working on an embedded system where a service technician needs to know status information at a glance.
-To fulfill this requirement, you and your team decide that it’d be easiest to display a status code using a hex code.
-Luckily, there’s only 16 different status states your system can assume, so a single seven segment display appears to be the perfect choice, however there’s only one problem: the hardware team still doesn’t know which pins on the microcontroller are going to be easiest to route to your seven segment display on the multi-layer PCB.
-Being the brilliant engineer you are, you decide to create a lookup table that allows you to easily map segments to pins.
-With this lookup table in mind, write code that displays any value between 0 and 15 on a seven-segment display.
-Make sure to create a bit-packed lookup table for each of the hex digits.
-To ensure your code works, continuously cycle through 0 and 15.</p>
-</li>
-<li>
-<p>You’re working on a communication protocol, and following some clever math over <a href="https://en.wikipedia.org/wiki/GF(2)">GF(2)</a>, you end up with a <code>uint64_t</code> where each bit represents an irrecoverable bit error.
-Since you’re working on a real-time system, you need to quickly determine if the number of bit errors is still recoverable.
-Write code that counts the number of bits set in a <code>uint64_t</code>.
-Make your code interactive by allowing a user to specify any integer over serial and reporting the number of bits set back to the user.</p>
-</li>
-<li>
-<p>Since you’re working in an embedded environment, memory is a scarce resource, making logging a headache.
-During the engineering design process, you and your team decide that you need to keep track of the occurrence of an event over the last eight time steps.
-Write code that cyclically fills a <code>uint8_t</code> where we represent the presence of an event by a set bit.
-When you press one push button, read the value of another to determine the occurrence of the event.
-<strong>Optionally</strong>, add another button that will print the last eight events over serial when pressed.
-During setup, zero the buffer to assume no events have happened.</p>
-</li>
-<li>
-<p><strong>(Challenge)</strong> When dealing with a vast amount of binary data, corruption is inevitable.
-Due to this possibility, we need a method to determine if our data has changed so that we can act accordingly.
-One method is to utilize a 32-bit <a href="https://en.wikipedia.org/wiki/Cyclic_redundancy_check">Cyclic Redundancy Check</a> (CRC-32).
-Implement a function that computes a CRC-32 given an array of <code>uint8_t</code>’s and the number of bytes using the standard IEEE polynomial of <code>0x04C11DB7</code> and initial condition of <code>0xFFFFFFFF</code>.
-<strong>Remember</strong>, endianness matters here!
-You might need to use the reversed version of the polynomial.
-Create an array with the message “cooper union” and check if your function reports a correct CRC-32.</p>
-</li>
+<li>Create two lookup tables: one that maps seven-segment display segments to pins and another that maps digits to pins.</li>
+<li>Write a function that, given a <code>uint8_t</code> bitmask, displays it on a seven-segment digit.</li>
+<li>Write code that multiplexes between the different digits of the display.
+At this point, it should look as if all the digits are on at the same time.</li>
+<li>Write a function that, given ASCII digits, letters, or the space character, returns an index into a lookup table of associated seven-segment bitmasks.</li>
+<li>Implement a circular text buffer that can repeatedly scroll on your display.</li>
 </ol>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../background/debugging.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../background/bit-manipulation-&amp;-lookup-tables.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../background/circular-buffers.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../examples/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -250,11 +209,11 @@ Create an array with the message “cooper union” and check if your function r
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../background/debugging.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../background/bit-manipulation-&amp;-lookup-tables.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../background/circular-buffers.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../examples/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
