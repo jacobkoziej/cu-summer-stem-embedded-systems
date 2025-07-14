@@ -23,10 +23,13 @@
 
 ## Exercises
 
-1. You're working on a parallel, serial system where you bit-bang ASCII characters on the digital IO pins of the Arduino.
-   Initially, you thought about using the IO pins in sequential order to write out the ASCII value easily with a bit shift; however, being the brilliant engineer you are, you anticipate a future where someone on the hardware team asks you to change a few of the IO pins you use.
-   Create a lookup table that maps the bit position in an ASCII character to an IO pin.
-   Utilizing this table, display any ASCII value using 7 LEDs.
+1. You're working on an embedded system where a service technician needs to know status information at a glance.
+   To fulfill this requirement, you and your team decide that it'd be easiest to display a status code using a hex code.
+   Luckily, there's only 16 different status states your system can assume, so a single seven segment display appears to be the perfect choice, however there's only one problem: the hardware team still doesn't know which pins on the microcontroller are going to be easiest to route to your seven segment display on the multi-layer PCB.
+   Being the brilliant engineer you are, you decide to create a lookup table that allows you to easily map segments to pins.
+   With this lookup table in mind, write code that displays any value between 0 and 15 on a seven-segment display.
+   Make sure to create a bit-packed lookup table for each of the hex digits.
+   To ensure your code works, continuously cycle through 0 and 15.
 
 2. You're working on a communication protocol, and following some clever math over [GF(2)], you end up with a `uint64_t` where each bit represents an irrecoverable bit error.
    Since you're working on a real-time system, you need to quickly determine if the number of bit errors is still recoverable.
