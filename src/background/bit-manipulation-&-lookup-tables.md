@@ -17,6 +17,9 @@
 - Bit packing
 - `enum`erations
 - Lookup tables
+- `sizeof` operator
+- `static` storage class qualifier
+- Seven-segment displays
 
 ## Exercises
 
