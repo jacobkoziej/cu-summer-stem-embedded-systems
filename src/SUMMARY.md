@@ -13,5 +13,6 @@
 - [Examples](examples/README.md)
   - [ASCII Remap](examples/ascii-remap.md)
   - [Button Debounce](examples/button-debounce.md)
+  - [Lookup Tables](examples/lookup-tables.md)
 - [How-tos](how-tos/README.md)
   - [debugWire](how-tos/debugwire.md)
