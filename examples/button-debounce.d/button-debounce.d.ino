@@ -1,7 +1,8 @@
-#define BUTTON      2
-#define DEBOUNCE_MS 4
+static const uint8_t BUTTON = 2;
 
-bool button_state;
+static const uint8_t DEBOUNCE_MS = 4;
+
+static bool button_state;
 
 void setup(void)
 {

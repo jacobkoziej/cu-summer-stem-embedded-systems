@@ -39,7 +39,7 @@
             const default_dark_theme = "navy";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-a87bc5e4.js"></script>
+        <script src="toc-2d018c37.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -490,13 +490,51 @@ Create an array with the message “cooper union” and check if your function r
 </ol>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="examples"><a class="header" href="#examples">Examples</a></h1>
 <ul>
+<li><a href="examples/ascii-remap.html">ASCII Remap</a></li>
 <li><a href="examples/button-debounce.html">Button Debounce</a></li>
+<li><a href="examples/circular-buffer.html">Circular Buffer</a></li>
+<li><a href="examples/lookup-tables.html">Lookup Tables</a></li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="button-debounce"><a class="header" href="#button-debounce">Button Debounce</a></h1>
-<pre><code class="language-cpp">#define BUTTON      2
-#define DEBOUNCE_MS 4
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ascii-remap"><a class="header" href="#ascii-remap">ASCII Remap</a></h1>
+<pre><code class="language-cpp">static const uint32_t BAUD = 115200;
 
-bool button_state;
+static const uint8_t DIGITS = 10;
+static const uint8_t INVALID_INDEX = 255;
+
+static uint8_t ascii_to_index(const unsigned char c)
+{
+  if ((c &gt;= '0') &amp;&amp; (c &lt;= '9'))
+    return c - '0';
+
+  if ((c &gt;= 'A') &amp;&amp; (c &lt;= 'Z'))
+    return c - 'A' + DIGITS;
+
+  if ((c &gt;= 'a') &amp;&amp; (c &lt;= 'z'))
+    return c - 'a' + DIGITS;
+
+  return INVALID_INDEX;
+}
+
+void setup(void)
+{
+  Serial.begin(BAUD);
+
+  Serial.println(ascii_to_index('4'));
+  Serial.println(ascii_to_index('J'));
+  Serial.println(ascii_to_index('K'));
+  Serial.println(ascii_to_index('!'));
+}
+
+void loop(void)
+{
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="button-debounce"><a class="header" href="#button-debounce">Button Debounce</a></h1>
+<pre><code class="language-cpp">static const uint8_t BUTTON = 2;
+
+static const uint8_t DEBOUNCE_MS = 4;
+
+static bool button_state;
 
 void setup(void)
 {
@@ -521,6 +559,77 @@ void loop(void)
     button_state = button_sample;
 
   digitalWrite(LED_BUILTIN, button_state);
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="circular-buffer"><a class="header" href="#circular-buffer">Circular Buffer</a></h1>
+<pre><code class="language-cpp">static const char MESSAGE[] = "cooper union ";
+
+static const uint8_t WINDOW_SIZE = 4;
+
+// exclude the NULL character when calculating the size
+static const uint8_t MESSAGES_SIZE = sizeof(MESSAGE) - 1;
+
+static const uint32_t BAUD  = 115200;
+static const uint16_t DELAY = 500;
+
+void setup(void)
+{
+  Serial.begin(BAUD);
+}
+
+void loop(void)
+{
+  static uint8_t index;
+
+  for (size_t i = 0; i &lt; WINDOW_SIZE; i++)
+    Serial.print(MESSAGE[(index + i) % MESSAGES_SIZE]);
+
+  Serial.print('\n');
+
+  index = (index + 1) % MESSAGES_SIZE;
+
+  delay(DELAY);
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="lookup-tables"><a class="header" href="#lookup-tables">Lookup Tables</a></h1>
+<pre><code class="language-cpp">enum {
+  RED,
+  GREEN,
+  BLUE,
+  COLORS_TOTAL,
+};
+
+static const uint16_t ADC_MAX = (1 &lt;&lt; 10) - 1;
+static const uint8_t  PWM_MAX = (1 &lt;&lt; 8)  - 1;
+
+static const uint8_t COLOR_TO_PIN[COLORS_TOTAL] = {
+  [RED]   = 9,
+  [GREEN] = 10,
+  [BLUE]  = 11,
+};
+
+static const uint8_t POTENTIOMETER_TO_PIN[COLORS_TOTAL] = {
+  [RED]   = A0,
+  [GREEN] = A1,
+  [BLUE]  = A2,
+};
+
+void setup(void)
+{
+  for (size_t i = 0; i &lt; COLORS_TOTAL; i++) {
+    pinMode(POTENTIOMETER_TO_PIN[i], INPUT);
+
+    pinMode(COLOR_TO_PIN[i], OUTPUT);
+    digitalWrite(COLOR_TO_PIN[i], LOW);
+  };
+}
+
+void loop(void)
+{
+  for (size_t i = 0; i &lt; COLORS_TOTAL; i++) {
+    const uint16_t sample = analogRead(POTENTIOMETER_TO_PIN[i]);
+    analogWrite(COLOR_TO_PIN[i], map(sample, 0, ADC_MAX, 0, PWM_MAX));
+  }
 }
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="how-tos"><a class="header" href="#how-tos">How-tos</a></h1>
