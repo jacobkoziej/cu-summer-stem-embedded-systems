@@ -22,7 +22,7 @@ static const uint8_t POTENTIOMETER_TO_PIN[COLORS_TOTAL] = {
 
 void setup(void)
 {
-  for (uint8_t i = 0; i < COLORS_TOTAL; i++) {
+  for (size_t i = 0; i < COLORS_TOTAL; i++) {
     pinMode(POTENTIOMETER_TO_PIN[i], INPUT);
 
     pinMode(COLOR_TO_PIN[i], OUTPUT);
@@ -32,7 +32,7 @@ void setup(void)
 
 void loop(void)
 {
-  for (uint8_t i = 0; i < COLORS_TOTAL; i++) {
+  for (size_t i = 0; i < COLORS_TOTAL; i++) {
     const uint16_t sample = analogRead(POTENTIOMETER_TO_PIN[i]);
     analogWrite(COLOR_TO_PIN[i], map(sample, 0, ADC_MAX, 0, PWM_MAX));
   }
