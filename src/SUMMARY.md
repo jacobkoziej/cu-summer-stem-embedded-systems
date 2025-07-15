@@ -18,3 +18,5 @@
   - [Lookup Tables](examples/lookup-tables.md)
 - [How-tos](how-tos/README.md)
   - [debugWire](how-tos/debugwire.md)
+- [Solutions](solutions/README.md)
+  - [Scrolling Quad Seven-Segment Display](solutions/scrolling-quad-seven-segment-display.md)
