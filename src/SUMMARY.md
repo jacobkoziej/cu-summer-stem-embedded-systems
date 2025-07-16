@@ -11,6 +11,7 @@
   - [Debugging](background/debugging.md)
   - [Bit Manipulation & Lookup Tables](background/bit-manipulation-&-lookup-tables.md)
   - [Circular Buffers](background/circular-buffers.md)
+  - [Timers & State Machines](background/timers-&-state-machines.md)
 - [Examples](examples/README.md)
   - [ASCII Remap](examples/ascii-remap.md)
   - [Button Debounce](examples/button-debounce.md)
