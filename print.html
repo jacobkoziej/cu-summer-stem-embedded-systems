@@ -39,7 +39,7 @@
             const default_dark_theme = "navy";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-2192b5a3.js"></script>
+        <script src="toc-293c485e.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -556,6 +556,7 @@ Your state machine should have the following states:</p>
 <li><a href="examples/button-debounce.html">Button Debounce</a></li>
 <li><a href="examples/circular-buffer.html">Circular Buffer</a></li>
 <li><a href="examples/lookup-tables.html">Lookup Tables</a></li>
+<li><a href="examples/timer-delay.html">Timer Delay</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ascii-remap"><a class="header" href="#ascii-remap">ASCII Remap</a></h1>
 <pre><code class="language-cpp">static const uint32_t BAUD = 115200;
@@ -691,6 +692,30 @@ void loop(void)
   for (size_t i = 0; i &lt; COLORS_TOTAL; i++) {
     const uint16_t sample = analogRead(POTENTIOMETER_TO_PIN[i]);
     analogWrite(COLOR_TO_PIN[i], map(sample, 0, ADC_MAX, 0, PWM_MAX));
+  }
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="timer-delay"><a class="header" href="#timer-delay">Timer Delay</a></h1>
+<pre><code class="language-cpp">static const uint32_t DELAY_US = 500000;
+
+static uint32_t previous_time_us;
+
+void setup(void)
+{
+  digitalWrite(LED_BUILTIN, LOW);
+  pinMode(LED_BUILTIN, OUTPUT);
+
+  previous_time_us = micros();
+}
+
+void loop(void)
+{
+  uint32_t current_time_us;
+
+  if ((current_time_us = micros()) - previous_time_us &gt;= DELAY_US) {
+    digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
+
+    previous_time_us = current_time_us;
   }
 }
 </code></pre>
