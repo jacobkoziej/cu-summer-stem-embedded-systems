@@ -8,6 +8,7 @@
 - Super loops
 - [`random()`] & [`randomSeed()`]
 - `struct`ures
+- `typedef`initions
 - [`switch`]-[`case`]s
 - State machines
 
