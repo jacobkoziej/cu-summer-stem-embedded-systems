@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Examples - cu-summer-stem-embedded-systems</title>
+        <title>Timers &amp; State Machines - cu-summer-stem-embedded-systems</title>
 
 
         <!-- Custom HTML head -->
@@ -143,7 +143,7 @@
                         <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/edit/master/src/examples/README.md" title="Suggest an edit" aria-label="Suggest an edit">
+                        <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/edit/master/src/background/timers-&amp;-state-machines.md" title="Suggest an edit" aria-label="Suggest an edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -172,23 +172,57 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="examples"><a class="header" href="#examples">Examples</a></h1>
+                        <h1 id="timers--state-machines"><a class="header" href="#timers--state-machines">Timers &amp; State Machines</a></h1>
+<p><em>We can’t describe everything in terms of finite states, but that sure hasn’t stopped us from trying.</em></p>
+<h2 id="outline"><a class="header" href="#outline">Outline</a></h2>
 <ul>
-<li><a href="ascii-remap.html">ASCII Remap</a></li>
-<li><a href="button-debounce.html">Button Debounce</a></li>
-<li><a href="circular-buffer.html">Circular Buffer</a></li>
-<li><a href="lookup-tables.html">Lookup Tables</a></li>
+<li><a href="https://docs.arduino.cc/language-reference/en/functions/time/millis/"><code>millis()</code></a> &amp; <a href="https://docs.arduino.cc/language-reference/en/functions/time/micros/"><code>micros()</code></a></li>
+<li>Super loops</li>
+<li><a href="https://docs.arduino.cc/language-reference/en/functions/random-numbers/random/"><code>random()</code></a> &amp; <a href="https://docs.arduino.cc/language-reference/en/functions/random-numbers/randomSeed/"><code>randomSeed()</code></a></li>
+<li><code>struct</code>ures</li>
+<li><a href="https://docs.arduino.cc/language-reference/en/structure/control-structure/switchCase/"><code>switch</code></a>-<a href="https://docs.arduino.cc/language-reference/en/structure/control-structure/switchCase/"><code>case</code></a>s</li>
+<li>State machines</li>
 </ul>
+<h2 id="exercises"><a class="header" href="#exercises">Exercises</a></h2>
+<ol>
+<li>
+<p>Blink two LEDs every 389 and 991 milliseconds.</p>
+</li>
+<li>
+<p>I miss the days of bringing quarters to school for a snack at the vending machine, so let’s make one to bring this childhood memory of mine back to life!
+Create a simple state machine to turn your Arduino into a vending machine!
+Your state machine should have the following states:</p>
+<ul>
+<li>Collecting quarters</li>
+<li>Item dispensing</li>
+<li>Returning change (if any)</li>
+</ul>
+<p>Since this is a “proof of concept” device, let’s make the following simplifications:</p>
+<ul>
+<li>Print status information to the serial console to let the user know what’s going on.</li>
+<li>Pressing a button adds a quarter.</li>
+<li>Pressing a button will toggle between items.</li>
+<li>Pressing a button returns users their change.</li>
+</ul>
+<p>And to complicate things a bit, let’s consider the following:</p>
+<ul>
+<li>Have at least three different priced items with a finite stock.</li>
+<li>Add a 30s timeout from the last inserted quarter. On timeout, return all change.</li>
+<li>Randomly reject quarters at a 1% rate and let users know about this failure.</li>
+<li>Blink the built-in LED every second so users know the machine is still on.</li>
+</ul>
+</li>
+</ol>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../background/timers-&amp;-state-machines.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../background/circular-buffers.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../examples/ascii-remap.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../examples/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -198,11 +232,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../background/timers-&amp;-state-machines.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../background/circular-buffers.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../examples/ascii-remap.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../examples/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
