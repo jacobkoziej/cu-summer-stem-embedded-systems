@@ -39,7 +39,7 @@
             const default_dark_theme = "navy";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-293c485e.js"></script>
+        <script src="toc-02ac424a.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -295,6 +295,7 @@ We’ll also have drop-in lessons as necessary to ensure we finish in time for t
 <li><strong>2025-07-14:</strong> <a href="background/bit-manipulation-&amp;-lookup-tables.html">Bit Manipulation &amp; Lookup Tables</a></li>
 <li><strong>2025-07-15:</strong> <a href="background/circular-buffers.html">Circular Buffers &amp; Seven Segment Displays</a></li>
 <li><strong>2025-07-16:</strong> <a href="background/timers-&amp;-state-machines.html">Timers &amp; State Machines</a></li>
+<li><strong>2025-07-17:</strong> <a href="background/interrupts.html">Interrupts</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="hello-world"><a class="header" href="#hello-world">Hello, World!</a></h1>
 <p><em>Getting the ball rolling with Arduino.</em></p>
@@ -550,6 +551,25 @@ Your state machine should have the following states:</p>
 </ul>
 </li>
 </ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="interrupts"><a class="header" href="#interrupts">Interrupts</a></h1>
+<p><em>Like a crying child, some things just need your attention right away.</em></p>
+<h2 id="outline-6"><a class="header" href="#outline-6">Outline</a></h2>
+<ul>
+<li>The Fourier Transform</li>
+<li>Hardware low-pass filter for debouncing</li>
+<li>Ultrasonic sensors</li>
+<li>Interrupts</li>
+<li><a href="https://docs.arduino.cc/language-reference/en/functions/external-interrupts/attachInterrupt/"><code>attachInterrupt()</code></a>, <a href="https://docs.arduino.cc/language-reference/en/functions/external-interrupts/detachInterrupt/"><code>detachInterrupt()</code></a>, &amp; <a href="https://docs.arduino.cc/language-reference/en/functions/external-interrupts/digitalPinToInterrupt/"><code>digitalPinToInterrupt()</code></a></li>
+<li>Function prototypes</li>
+<li>Header files</li>
+<li>Multi-file sketches</li>
+<li>Quadrature encoders</li>
+</ul>
+<h2 id="exercises-5"><a class="header" href="#exercises-5">Exercises</a></h2>
+<ol>
+<li>Utilize interrupts to keep track of encoder steps.
+Create a separate source file that encapsulates your encoder functionality and expose the current encoder steps with a function that has the following signature: <code>uint32_t encoder_steps(void)</code>.</li>
+</ol>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="examples"><a class="header" href="#examples">Examples</a></h1>
 <ul>
 <li><a href="examples/ascii-remap.html">ASCII Remap</a></li>
@@ -557,6 +577,7 @@ Your state machine should have the following states:</p>
 <li><a href="examples/circular-buffer.html">Circular Buffer</a></li>
 <li><a href="examples/lookup-tables.html">Lookup Tables</a></li>
 <li><a href="examples/timer-delay.html">Timer Delay</a></li>
+<li><a href="examples/ultrasonic-interrupt.html">Ultrasonic Interrupt</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ascii-remap"><a class="header" href="#ascii-remap">ASCII Remap</a></h1>
 <pre><code class="language-cpp">static const uint32_t BAUD = 115200;
@@ -717,6 +738,96 @@ void loop(void)
 
     previous_time_us = current_time_us;
   }
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ultrasonic-interrupt"><a class="header" href="#ultrasonic-interrupt">Ultrasonic Interrupt</a></h1>
+<pre><code class="language-cpp">static const uint8_t ECHO_PIN    = 2;
+static const uint8_t TRIGGER_PIN = 4;
+
+/*
+ * In Standard Temperature and Pressure (STP), sound travels at 343 m/s.
+ * Here we define this constant but in terms of microseconds to make it
+ * easy for us to convert to meters given our measurement in
+ * microseconds.
+ */
+static const float STP_SOUND_METERS_PER_US = 343e-6f;
+
+static const uint32_t BAUD            = 115200;
+static const uint8_t  PULSE_LENGTH_US = 10;
+static const uint8_t  SAMPLE_DELAY_MS = 10;
+
+static volatile bool     pulse_ready;
+static volatile uint16_t pulse_time_us;
+
+static void echo_isr(void)
+{
+  /*
+   * NOTE: On ATmega328P, only one interrupt can execute at a time. This
+   * becomes problematic when using millis() or micros() inside of an
+   * interrupt context as the underlying timers which drive these
+   * functions are only 16-bit! This means the upper 16 bits of the
+   * returned value is stored independent of the timer value and
+   * incremented with an overflow interrupt. Since timers don't stop in
+   * interrupt contexts, it's possible for the timer to overflow between
+   * the start and end times, causing a possible erroneous reading of
+   * about (1 &lt;&lt; 32) - (1 &lt;&lt; 16). To avoid this, we only store the lower
+   * 16 bits of the return value of millis() or micros(), more
+   * specifically, the actual timer value, allowing us to avoid this
+   * issue all together!
+   */
+  static uint16_t pulse_start_us;
+
+  // erroneous interrupt
+  if (pulse_ready)
+    return;
+
+  if (digitalRead(ECHO_PIN)) {
+    pulse_start_us = micros();
+
+    return;
+  }
+
+  const uint16_t pulse_end_us = micros();
+
+  pulse_time_us = pulse_end_us - pulse_start_us;
+  pulse_ready   = true;
+}
+
+void setup(void)
+{
+  pinMode(ECHO_PIN, INPUT);
+
+  digitalWrite(TRIGGER_PIN, LOW);
+  pinMode(TRIGGER_PIN, OUTPUT);
+
+  Serial.begin(BAUD);
+
+  attachInterrupt(digitalPinToInterrupt(ECHO_PIN), echo_isr, CHANGE);
+}
+
+void loop(void)
+{
+  pulse_ready = false;
+
+  digitalWrite(TRIGGER_PIN, HIGH);
+  delayMicroseconds(PULSE_LENGTH_US);
+  digitalWrite(TRIGGER_PIN, LOW);
+
+  // NOTE: your code can be doing other things while we wait for the
+  // pulse to come in, like timeout---we just have nothing to do
+  while (!pulse_ready)
+    continue;
+
+  // since the pulse travels to the object and back, we need to divide
+  // the total time in half since we measure double the distance
+  const float distance_m = STP_SOUND_METERS_PER_US * (pulse_time_us / 2);
+
+  Serial.print(distance_m);
+  Serial.println("m");
+
+  // if we don't wait here, the HC-SR04 becomes unhappy and doesn't
+  // ever send the next pulse we request :(
+  delay(SAMPLE_DELAY_MS);
 }
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="how-tos"><a class="header" href="#how-tos">How-tos</a></h1>

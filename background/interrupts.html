@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Analog &amp; Serial - cu-summer-stem-embedded-systems</title>
+        <title>Interrupts - cu-summer-stem-embedded-systems</title>
 
 
         <!-- Custom HTML head -->
@@ -143,7 +143,7 @@
                         <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/edit/master/src/background/analog-&amp;-serial.md" title="Suggest an edit" aria-label="Suggest an edit">
+                        <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/edit/master/src/background/interrupts.md" title="Suggest an edit" aria-label="Suggest an edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -172,60 +172,35 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="analog--serial"><a class="header" href="#analog--serial">Analog &amp; Serial</a></h1>
-<p><em>More interesting interactions with the world.</em></p>
+                        <h1 id="interrupts"><a class="header" href="#interrupts">Interrupts</a></h1>
+<p><em>Like a crying child, some things just need your attention right away.</em></p>
 <h2 id="outline"><a class="header" href="#outline">Outline</a></h2>
 <ul>
-<li>Quantization</li>
-<li>Pulse-Width Modulation (PWM)</li>
-<li>Potentiometers</li>
-<li>Analog to Digital Conversion (ADC)</li>
-<li><a href="https://docs.arduino.cc/language-reference/en/functions/math/map/"><code>map()</code></a> function</li>
-<li>Hysteresis</li>
-<li><a href="https://docs.arduino.cc/language-reference/en/functions/communication/serial/"><code>Serial</code></a> communication:
-<ul>
-<li>RX vs TX</li>
-<li>Baud rate</li>
-<li>Parity</li>
-<li>Serialization</li>
-<li>Serial console</li>
-</ul>
-</li>
-<li>ASCII encoding</li>
-<li>RGB(A) color model</li>
-<li>RGB LEDs</li>
-<li><a href="https://docs.arduino.cc/language-reference/en/functions/communication/serial/"><code>Serial</code></a> debugging</li>
+<li>The Fourier Transform</li>
+<li>Hardware low-pass filter for debouncing</li>
+<li>Ultrasonic sensors</li>
+<li>Interrupts</li>
+<li><a href="https://docs.arduino.cc/language-reference/en/functions/external-interrupts/attachInterrupt/"><code>attachInterrupt()</code></a>, <a href="https://docs.arduino.cc/language-reference/en/functions/external-interrupts/detachInterrupt/"><code>detachInterrupt()</code></a>, &amp; <a href="https://docs.arduino.cc/language-reference/en/functions/external-interrupts/digitalPinToInterrupt/"><code>digitalPinToInterrupt()</code></a></li>
+<li>Function prototypes</li>
+<li>Header files</li>
+<li>Multi-file sketches</li>
+<li>Quadrature encoders</li>
 </ul>
 <h2 id="exercises"><a class="header" href="#exercises">Exercises</a></h2>
 <ol>
-<li>
-<p>In anticipation of building your own audio amplifier, you decide to create a volume indicator.
-Using four LEDs, create a 4-LED volume indicator where a potentiometer serves as the volume knob.
-Ensure that hysteresis is added to each of the volume regions to prevent flickering of volume levels.</p>
-</li>
-<li>
-<p>Since I’m a huge Pink Floyd fan, let’s pick <a href="https://open.spotify.com/track/6FBPOJLxUZEair6x4kLDhf">Any Colour You Like</a>.
-Utilize three potentiometers to change the color of an RGB LED to any color you like.
-<strong>Optionally</strong>, add a button to dim the LED brightness by 50%.</p>
-</li>
-<li>
-<p>Since moving our hands from the keyboard is such a hassle, let’s instead utilize the serial console to control the color of the LED.
-Your code should expect a valid hex RGB value followed by a newline.
-If this value is malformed, return an error to the user with a meaningful error code; otherwise, return a success code.
-<strong>Optionally</strong>, add support for an optional alpha channel.
-If the user supplies no alpha channel, assume alpha is 100%.</p>
-</li>
+<li>Utilize interrupts to keep track of encoder steps.
+Create a separate source file that encapsulates your encoder functionality and expose the current encoder steps with a function that has the following signature: <code>uint32_t encoder_steps(void)</code>.</li>
 </ol>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../background/hello-world.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../background/timers-&amp;-state-machines.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../background/debugging.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../examples/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -235,11 +210,11 @@ If the user supplies no alpha channel, assume alpha is 100%.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../background/hello-world.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../background/timers-&amp;-state-machines.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../background/debugging.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../examples/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
