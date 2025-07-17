@@ -18,6 +18,7 @@
   - [Circular Buffer](examples/circular-buffer.md)
   - [Lookup Tables](examples/lookup-tables.md)
   - [Timer Delay](examples/timer-delay.md)
+  - [Ultrasonic Interrupt](examples/ultrasonic-interrupt.md)
 - [How-tos](how-tos/README.md)
   - [debugWire](how-tos/debugwire.md)
 - [Solutions](solutions/README.md)
