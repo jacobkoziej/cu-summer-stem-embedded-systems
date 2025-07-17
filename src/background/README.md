@@ -8,3 +8,4 @@ Tentative schedule:
 - **2025-07-14:** [Bit Manipulation & Lookup Tables](bit-manipulation-&-lookup-tables.md)
 - **2025-07-15:** [Circular Buffers & Seven Segment Displays](circular-buffers.md)
 - **2025-07-16:** [Timers & State Machines](timers-&-state-machines.md)
+- **2025-07-17:** [Interrupts](interrupts.md)
