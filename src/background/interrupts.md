@@ -9,6 +9,7 @@
 - Ultrasonic sensors
 - Interrupts
 - [`attachInterrupt()`], [`detachInterrupt()`], & [`digitalPinToInterrupt()`]
+- [`interrupts()`] & [`noInterrupts()`]
 - Function prototypes
 - Header files
 - Multi-file sketches
@@ -22,3 +23,5 @@
 [`attachinterrupt()`]: https://docs.arduino.cc/language-reference/en/functions/external-interrupts/attachInterrupt/
 [`detachinterrupt()`]: https://docs.arduino.cc/language-reference/en/functions/external-interrupts/detachInterrupt/
 [`digitalpintointerrupt()`]: https://docs.arduino.cc/language-reference/en/functions/external-interrupts/digitalPinToInterrupt/
+[`interrupts()`]: https://docs.arduino.cc/language-reference/en/functions/interrupts/interrupts/
+[`nointerrupts()`]: https://docs.arduino.cc/language-reference/en/functions/interrupts/noInterrupts/
