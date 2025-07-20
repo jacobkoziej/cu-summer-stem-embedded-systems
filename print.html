@@ -39,7 +39,7 @@
             const default_dark_theme = "navy";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-02ac424a.js"></script>
+        <script src="toc-9512fa0b.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -852,8 +852,122 @@ To make this possible, we’ll be taking advantage of <a href="https://github.co
 </ol>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="solutions"><a class="header" href="#solutions">Solutions</a></h1>
 <ul>
+<li><a href="solutions/encoder-steps.html">Encoder Steps</a></li>
 <li><a href="solutions/scrolling-quad-seven-segment-display.html">Scrolling Quad Seven-Segment Display</a></li>
 </ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="encoder-steps"><a class="header" href="#encoder-steps">Encoder Steps</a></h1>
+<pre><code class="language-cpp">// SPDX-License-Identifier: MPL-2.0
+/*
+ * encoder steps
+ * Copyright (C) 2025  Jacob Koziej &lt;jacobkoziej@gmail.com&gt;
+ */
+
+#include "encoder.h"
+
+const static uint32_t BAUD = 115200;
+
+void setup(void)
+{
+  encoder_setup();
+
+  Serial.begin(BAUD);
+}
+
+void loop(void)
+{
+  Serial.println(encoder_steps());
+}
+</code></pre>
+<h2 id="encodercc"><a class="header" href="#encodercc"><code>encoder.cc</code></a></h2>
+<pre><code class="language-cpp">// SPDX-License-Identifier: MPL-2.0
+/*
+ * encoder.cc -- encoder steps
+ * Copyright (C) 2025  Jacob Koziej &lt;jacobkoziej@gmail.com&gt;
+ */
+
+#include "encoder.h"
+
+#include "pins.h"
+
+#include &lt;Arduino.h&gt;
+#include &lt;stdint.h&gt;
+
+static volatile uint32_t steps;
+
+static void channel_isr(bool reverse)
+{
+	const uint8_t A = digitalRead(PIN_ENCODER_CHANNEL_A);
+	const uint8_t B = digitalRead(PIN_ENCODER_CHANNEL_B);
+
+	steps += A ^ B ^ reverse ? 1 : -1;
+}
+
+static void channel_a_isr(void)
+{
+	channel_isr(false);
+}
+
+static void channel_b_isr(void)
+{
+	channel_isr(true);
+}
+
+void encoder_setup(void)
+{
+	pinMode(PIN_ENCODER_CHANNEL_A, INPUT);
+	pinMode(PIN_ENCODER_CHANNEL_B, INPUT);
+
+	steps = 0;
+
+	attachInterrupt(
+		digitalPinToInterrupt(PIN_ENCODER_CHANNEL_A),
+		channel_a_isr,
+		CHANGE);
+	attachInterrupt(
+		digitalPinToInterrupt(PIN_ENCODER_CHANNEL_B),
+		channel_b_isr,
+		CHANGE);
+}
+
+uint32_t encoder_steps(void)
+{
+	return steps;
+}
+</code></pre>
+<h2 id="encoderh"><a class="header" href="#encoderh"><code>encoder.h</code></a></h2>
+<pre><code class="language-cpp">// SPDX-License-Identifier: MPL-2.0
+/*
+ * encoder.h -- encoder steps
+ * Copyright (C) 2025  Jacob Koziej &lt;jacobkoziej@gmail.com&gt;
+ */
+
+#ifndef ENCODER_STEPS_ENCODER_H
+#define ENCODER_STEPS_ENCODER_H
+
+#include &lt;stdint.h&gt;
+
+void     encoder_setup(void);
+uint32_t encoder_steps(void);
+
+#endif  // ENCODER_STEPS_ENCODER_H
+</code></pre>
+<h2 id="pinsh"><a class="header" href="#pinsh"><code>pins.h</code></a></h2>
+<pre><code class="language-cpp">// SPDX-License-Identifier: MPL-2.0
+/*
+ * pins.h -- pinout
+ * Copyright (C) 2025  Jacob Koziej &lt;jacobkoziej@gmail.com&gt;
+ */
+
+#ifndef ENCODER_STEPS_PINS_H
+#define ENCODER_STEPS_PINS_H
+
+#include &lt;stdint.h&gt;
+
+const static uint8_t PIN_ENCODER_CHANNEL_A = 2;
+const static uint8_t PIN_ENCODER_CHANNEL_B = 3;
+
+#endif  // ENCODER_STEPS_PINS_H
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="scrolling-quad-seven-segment-display"><a class="header" href="#scrolling-quad-seven-segment-display">Scrolling Quad Seven-Segment Display</a></h1>
 <pre><code class="language-cpp">// SPDX-License-Identifier: MPL-2.0
 /*
