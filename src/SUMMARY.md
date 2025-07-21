@@ -13,6 +13,8 @@
   - [Circular Buffers](background/circular-buffers.md)
   - [Timers & State Machines](background/timers-&-state-machines.md)
   - [Interrupts](background/interrupts.md)
+- [C-ing Beyond Arduino](c-ing-beyond-arduino/README.md)
+  - [Hello, Again!?](c-ing-beyond-arduino/hello-again.md)
 - [Examples](examples/README.md)
   - [ASCII Remap](examples/ascii-remap.md)
   - [Button Debounce](examples/button-debounce.md)
