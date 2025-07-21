@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-b42dfea6.js";
+            window.path_to_searchindex_js = "searchindex-524ef3e6.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-e7a24ba9.js"></script>
@@ -1144,7 +1144,7 @@ Throwing this together, we get the following (unoptimized) output for a subset o
 	sts _ZL5steps+3,r27	 ;  steps, _2
 </code></pre>
 <p>This output can be hard to interpret if you’ve never read or written assembly before, but I’d like to draw your attention to one thing: the difference in function body length for the <code>static</code> case.
-Again, for the seasoned C programmer, this hint might be a dead giveaway; however, let us probe a bit further.</p>
+Again, for the seasoned C++ programmer, this hint might be a dead giveaway; however, let us probe a bit further.</p>
 <p>Let’s take a closer look at the following block in <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/blob/master/src/bug-hall-of-fame/static-initialization.d/static.s"><code>static.s</code></a>:</p>
 <pre><code> ;  static.cc:13:   static bool A = digitalRead(PIN_ENCODER_CHANNEL_A);
 	ldi r24,lo8(_ZGVZ13channel_a_isrvE1A)	 ;  _ZGVZ13channel_a_isrvE1A.0_1,
