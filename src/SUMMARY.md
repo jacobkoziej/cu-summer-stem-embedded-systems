@@ -27,3 +27,7 @@
 - [Solutions](solutions/README.md)
   - [Encoder Steps](solutions/encoder-steps.md)
   - [Scrolling Quad Seven-Segment Display](solutions/scrolling-quad-seven-segment-display.md)
+
+---
+
+[Useful Links](useful-links.md)
