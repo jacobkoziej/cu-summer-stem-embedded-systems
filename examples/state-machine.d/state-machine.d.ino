@@ -1,7 +1,13 @@
-static const uint8_t MODE_BUTTON_PIN   = 2;
-static const uint8_t ACTION_BUTTON_PIN = 4;
+enum {
+  BUTTON_MODE,
+  BUTTON_ACTION,
+  BUTTONS_TOTAL,
+};
 
-static const uint32_t BAUD = 115200;
+static const uint8_t BUTTON_TO_PIN[BUTTONS_TOTAL] = {
+  [BUTTON_MODE]   = 2,
+  [BUTTON_ACTION] = 4,
+};
 
 enum {
   STATE_ADD,
@@ -10,14 +16,29 @@ enum {
   STATES_TOTAL,
 };
 
+static const uint32_t BAUD = 115200;
+
 static int32_t count;
+
+static bool button_rising(const int button)
+{
+  static uint8_t previous_state[BUTTONS_TOTAL];
+
+  const uint8_t current_state = digitalRead(BUTTON_TO_PIN[button]);
+
+  const bool rising = !previous_state[button] && current_state;
+
+  previous_state[button] = current_state;
+
+  return rising;
+}
 
 static int state_add(void)
 {
-  if (digitalRead(MODE_BUTTON_PIN))
+  if (button_rising(BUTTON_MODE))
     return STATE_SUB;
 
-  if (digitalRead(ACTION_BUTTON_PIN)) {
+  if (button_rising(BUTTON_ACTION)) {
     ++count;
 
     Serial.print("Count: ");
@@ -29,10 +50,10 @@ static int state_add(void)
 
 static int state_sub(void)
 {
-  if (digitalRead(MODE_BUTTON_PIN))
+  if (button_rising(BUTTON_MODE))
     return STATE_CLEAR;
 
-  if (digitalRead(ACTION_BUTTON_PIN)) {
+  if (button_rising(BUTTON_ACTION)) {
     --count;
 
     Serial.print("Count: ");
@@ -44,10 +65,10 @@ static int state_sub(void)
 
 static int state_clear(void)
 {
-  if (digitalRead(MODE_BUTTON_PIN))
+  if (button_rising(BUTTON_MODE))
     return STATE_ADD;
 
-  if (digitalRead(ACTION_BUTTON_PIN)) {
+  if (button_rising(BUTTON_ACTION)) {
     count = 0;
 
     Serial.println("Count cleared");
@@ -58,8 +79,8 @@ static int state_clear(void)
 
 void setup(void)
 {
-  pinMode(MODE_BUTTON_PIN, INPUT);
-  pinMode(ACTION_BUTTON_PIN, INPUT);
+  for (size_t i = 0; i < BUTTONS_TOTAL; i++)
+    pinMode(BUTTON_TO_PIN[i], INPUT);
 
   Serial.begin(BAUD);
 }
