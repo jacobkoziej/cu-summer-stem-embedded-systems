@@ -20,6 +20,8 @@
   - [Lookup Tables](examples/lookup-tables.md)
   - [Timer Delay](examples/timer-delay.md)
   - [Ultrasonic Interrupt](examples/ultrasonic-interrupt.md)
+- [Bug Hall of Fame](bug-hall-of-fame/README.md)
+  - [Static Initialization](bug-hall-of-fame/static-initialization.md)
 - [How-tos](how-tos/README.md)
   - [debugWire](how-tos/debugwire.md)
 - [Solutions](solutions/README.md)
