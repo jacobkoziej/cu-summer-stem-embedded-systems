@@ -66,7 +66,7 @@ The emission of these instructions stems from the [`static` storage class specif
 
 ## So What Does this Mean?
 
-Converting the C++17 draft to plain English: **assignment to `static` variables in the function scope is done once**.
+Converting the C++17 draft to plain English: **initialization of `static` variables in the function scope is done once**.
 In particular, the first time the function executes.
 What this means for [`static.cc`] is that the values of `A` and `B` do not change following the first invocation of the [`CHANGE` interrupt].
 As you can imagine, we can either get stuck counting in one direction, or we have the channel A and B ISRs fighting with one another, and `steps` oscillates![^oscillations]
