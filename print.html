@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-39bb3466.js";
+            window.path_to_searchindex_js = "searchindex-a19b2597.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-3ec38920.js"></script>
+        <script src="toc-e7a24ba9.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -586,6 +586,7 @@ Create a separate source file that encapsulates your encoder functionality and e
 <li><a href="examples/button-debounce.html">Button Debounce</a></li>
 <li><a href="examples/circular-buffer.html">Circular Buffer</a></li>
 <li><a href="examples/lookup-tables.html">Lookup Tables</a></li>
+<li><a href="examples/state-machine.html">State Machine</a></li>
 <li><a href="examples/timer-delay.html">Timer Delay</a></li>
 <li><a href="examples/ultrasonic-interrupt.html">Ultrasonic Interrupt</a></li>
 </ul>
@@ -724,6 +725,112 @@ void loop(void)
     const uint16_t sample = analogRead(POTENTIOMETER_TO_PIN[i]);
     analogWrite(COLOR_TO_PIN[i], map(sample, 0, ADC_MAX, 0, PWM_MAX));
   }
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="state-machine"><a class="header" href="#state-machine">State Machine</a></h1>
+<pre><code class="language-cpp">static const uint8_t MODE_BUTTON_PIN   = 2;
+static const uint8_t ACTION_BUTTON_PIN = 4;
+
+static const uint32_t BAUD = 115200;
+
+enum {
+  STATE_ADD,
+  STATE_SUB,
+  STATE_CLEAR,
+  STATES_TOTAL,
+};
+
+static int32_t count;
+
+static int state_add(void)
+{
+  if (digitalRead(MODE_BUTTON_PIN))
+    return STATE_SUB;
+
+  if (digitalRead(ACTION_BUTTON_PIN)) {
+    ++count;
+
+    Serial.print("Count: ");
+    Serial.println(count);
+  }
+
+  return STATE_ADD;
+}
+
+static int state_sub(void)
+{
+  if (digitalRead(MODE_BUTTON_PIN))
+    return STATE_CLEAR;
+
+  if (digitalRead(ACTION_BUTTON_PIN)) {
+    --count;
+
+    Serial.print("Count: ");
+    Serial.println(count);
+  }
+
+  return STATE_SUB;
+}
+
+static int state_clear(void)
+{
+  if (digitalRead(MODE_BUTTON_PIN))
+    return STATE_ADD;
+
+  if (digitalRead(ACTION_BUTTON_PIN)) {
+    count = 0;
+
+    Serial.println("Count cleared");
+  }
+
+  return STATE_CLEAR;
+}
+
+void setup(void)
+{
+  pinMode(MODE_BUTTON_PIN, INPUT);
+  pinMode(ACTION_BUTTON_PIN, INPUT);
+
+  Serial.begin(BAUD);
+}
+
+void loop(void)
+{
+  static uint8_t state;
+
+  uint8_t new_state;
+
+  switch (state) {
+    case STATE_ADD: {
+      new_state = state_add();
+      break;
+    };
+
+    case STATE_SUB: {
+      new_state = state_sub();
+      break;
+    };
+
+    case STATE_CLEAR: {
+      new_state = state_clear();
+      break;
+    };
+
+    default: {
+      new_state = STATE_ADD;
+      break;
+    };
+  }
+
+  if (state != new_state) {
+    Serial.print("LOG: transitioning from state");
+    Serial.print(state);
+    Serial.print(" to ");
+    Serial.print(new_state);
+    Serial.println();
+  }
+
+  state = new_state;
 }
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="timer-delay"><a class="header" href="#timer-delay">Timer Delay</a></h1>

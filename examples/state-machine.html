@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Ultrasonic Interrupt - cu-summer-stem-embedded-systems</title>
+        <title>State Machine - cu-summer-stem-embedded-systems</title>
 
 
         <!-- Custom HTML head -->
@@ -147,7 +147,7 @@
                         <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/edit/master/src/examples/ultrasonic-interrupt.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                        <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/edit/master/src/examples/state-machine.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -181,94 +181,110 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="ultrasonic-interrupt"><a class="header" href="#ultrasonic-interrupt">Ultrasonic Interrupt</a></h1>
-<pre><code class="language-cpp">static const uint8_t ECHO_PIN    = 2;
-static const uint8_t TRIGGER_PIN = 4;
+                        <h1 id="state-machine"><a class="header" href="#state-machine">State Machine</a></h1>
+<pre><code class="language-cpp">static const uint8_t MODE_BUTTON_PIN   = 2;
+static const uint8_t ACTION_BUTTON_PIN = 4;
 
-/*
- * In Standard Temperature and Pressure (STP), sound travels at 343 m/s.
- * Here we define this constant but in terms of microseconds to make it
- * easy for us to convert to meters given our measurement in
- * microseconds.
- */
-static const float STP_SOUND_METERS_PER_US = 343e-6f;
+static const uint32_t BAUD = 115200;
 
-static const uint32_t BAUD            = 115200;
-static const uint8_t  PULSE_LENGTH_US = 10;
-static const uint8_t  SAMPLE_DELAY_MS = 10;
+enum {
+  STATE_ADD,
+  STATE_SUB,
+  STATE_CLEAR,
+  STATES_TOTAL,
+};
 
-static volatile bool     pulse_ready;
-static volatile uint16_t pulse_time_us;
+static int32_t count;
 
-static void echo_isr(void)
+static int state_add(void)
 {
-  /*
-   * NOTE: On ATmega328P, only one interrupt can execute at a time. This
-   * becomes problematic when using millis() or micros() inside of an
-   * interrupt context as the underlying timers which drive these
-   * functions are only 16-bit! This means the upper 16 bits of the
-   * returned value is stored independent of the timer value and
-   * incremented with an overflow interrupt. Since timers don't stop in
-   * interrupt contexts, it's possible for the timer to overflow between
-   * the start and end times, causing a possible erroneous reading of
-   * about (1 &lt;&lt; 32) - (1 &lt;&lt; 16). To avoid this, we only store the lower
-   * 16 bits of the return value of millis() or micros(), more
-   * specifically, the actual timer value, allowing us to avoid this
-   * issue all together!
-   */
-  static uint16_t pulse_start_us;
+  if (digitalRead(MODE_BUTTON_PIN))
+    return STATE_SUB;
 
-  // erroneous interrupt
-  if (pulse_ready)
-    return;
+  if (digitalRead(ACTION_BUTTON_PIN)) {
+    ++count;
 
-  if (digitalRead(ECHO_PIN)) {
-    pulse_start_us = micros();
-
-    return;
+    Serial.print("Count: ");
+    Serial.println(count);
   }
 
-  const uint16_t pulse_end_us = micros();
+  return STATE_ADD;
+}
 
-  pulse_time_us = pulse_end_us - pulse_start_us;
-  pulse_ready   = true;
+static int state_sub(void)
+{
+  if (digitalRead(MODE_BUTTON_PIN))
+    return STATE_CLEAR;
+
+  if (digitalRead(ACTION_BUTTON_PIN)) {
+    --count;
+
+    Serial.print("Count: ");
+    Serial.println(count);
+  }
+
+  return STATE_SUB;
+}
+
+static int state_clear(void)
+{
+  if (digitalRead(MODE_BUTTON_PIN))
+    return STATE_ADD;
+
+  if (digitalRead(ACTION_BUTTON_PIN)) {
+    count = 0;
+
+    Serial.println("Count cleared");
+  }
+
+  return STATE_CLEAR;
 }
 
 void setup(void)
 {
-  pinMode(ECHO_PIN, INPUT);
-
-  digitalWrite(TRIGGER_PIN, LOW);
-  pinMode(TRIGGER_PIN, OUTPUT);
+  pinMode(MODE_BUTTON_PIN, INPUT);
+  pinMode(ACTION_BUTTON_PIN, INPUT);
 
   Serial.begin(BAUD);
-
-  attachInterrupt(digitalPinToInterrupt(ECHO_PIN), echo_isr, CHANGE);
 }
 
 void loop(void)
 {
-  pulse_ready = false;
+  static uint8_t state;
 
-  digitalWrite(TRIGGER_PIN, HIGH);
-  delayMicroseconds(PULSE_LENGTH_US);
-  digitalWrite(TRIGGER_PIN, LOW);
+  uint8_t new_state;
 
-  // NOTE: your code can be doing other things while we wait for the
-  // pulse to come in, like timeout---we just have nothing to do
-  while (!pulse_ready)
-    continue;
+  switch (state) {
+    case STATE_ADD: {
+      new_state = state_add();
+      break;
+    };
 
-  // since the pulse travels to the object and back, we need to divide
-  // the total time in half since we measure double the distance
-  const float distance_m = STP_SOUND_METERS_PER_US * (pulse_time_us / 2);
+    case STATE_SUB: {
+      new_state = state_sub();
+      break;
+    };
 
-  Serial.print(distance_m);
-  Serial.println("m");
+    case STATE_CLEAR: {
+      new_state = state_clear();
+      break;
+    };
 
-  // if we don't wait here, the HC-SR04 becomes unhappy and doesn't
-  // ever send the next pulse we request :(
-  delay(SAMPLE_DELAY_MS);
+    default: {
+      new_state = STATE_ADD;
+      break;
+    };
+  }
+
+  if (state != new_state) {
+    Serial.print("LOG: transitioning from state");
+    Serial.print(state);
+    Serial.print(" to ");
+    Serial.print(new_state);
+    Serial.println();
+  }
+
+  state = new_state;
 }
 </code></pre>
 
@@ -276,11 +292,11 @@ void loop(void)
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../examples/timer-delay.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../examples/lookup-tables.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../bug-hall-of-fame/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../examples/timer-delay.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -290,11 +306,11 @@ void loop(void)
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../examples/timer-delay.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../examples/lookup-tables.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../bug-hall-of-fame/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../examples/timer-delay.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
