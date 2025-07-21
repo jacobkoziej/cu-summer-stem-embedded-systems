@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-48b99a52.js";
+            window.path_to_searchindex_js = "searchindex-590d9a71.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-3916df5e.js"></script>
@@ -1049,7 +1049,7 @@ Again, for the seasoned C programmer, this hint might be a dead giveaway; howeve
 Unfortunately for us, this byte is always set to <code>1</code> following a call to <a href="https://docs.arduino.cc/language-reference/en/functions/digital-io/digitalwrite/"><code>digitalWrite()</code></a>.
 The emission of these instructions stems from the <a href="https://timsong-cpp.github.io/cppwp/n4659/dcl.stc#4"><code>static</code> storage class specifier</a>, the <a href="https://timsong-cpp.github.io/cppwp/n4659/stmt.dcl#4">dynamic initialization of variables with the <code>static</code> storage class</a>, and their <a href="https://timsong-cpp.github.io/cppwp/n4659/basic.stc.static#def:static_storage_duration">storage duration</a>.</p>
 <h2 id="so-what-does-this-mean"><a class="header" href="#so-what-does-this-mean">So What Does this Mean?</a></h2>
-<p>Converting the C++17 draft to plain English: <strong>assignment to <code>static</code> variables in the function scope is done once</strong>.
+<p>Converting the C++17 draft to plain English: <strong>initialization of <code>static</code> variables in the function scope is done once</strong>.
 In particular, the first time the function executes.
 What this means for <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/blob/master/src/bug-hall-of-fame/static-initialization.d/static.cc"><code>static.cc</code></a> is that the values of <code>A</code> and <code>B</code> do not change following the first invocation of the <a href="https://docs.arduino.cc/language-reference/en/functions/external-interrupts/attachInterrupt/#parameters"><code>CHANGE</code> interrupt</a>.
 As you can imagine, we can either get stuck counting in one direction, or we have the channel A and B ISRs fighting with one another, and <code>steps</code> oscillates!<sup class="footnote-reference" id="fr-oscillations-1"><a href="#footnote-oscillations">3</a></sup></p>
