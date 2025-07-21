@@ -1,0 +1,455 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Static Initialization - cu-summer-stem-embedded-systems</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="The Cooper Union - Summer STEM Embedded Systems: C-ing Beyond Arduino">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-3865ffda.css">
+        <link rel="stylesheet" href="../css/general-4c35105a.css">
+        <link rel="stylesheet" href="../css/chrome-c0e702bf.css">
+        <link rel="stylesheet" href="../css/print-ad67d350.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome-799aeb25.css">
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight-56612340.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex-48b99a52.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc-3916df5e.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">cu-summer-stem-embedded-systems</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/edit/master/src/bug-hall-of-fame/static-initialization.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="static-initialization"><a class="header" href="#static-initialization">Static Initialization</a></h1>
+<p>While working through our quadrature encoder activity, I gave a hint to the class that by applying a bitwise XOR to channels A and B on a <a href="https://docs.arduino.cc/language-reference/en/functions/external-interrupts/attachInterrupt/#parameters"><code>CHANGE</code> interrupt</a>, you could quickly determine the direction of rotation.
+The trouble started soon thereafter with three different situations:</p>
+<ul>
+<li>the encoder step count could increment or decrement</li>
+<li>the encoder step count only increments or decrements, but not both</li>
+<li>or the encoder step count would oscillate around a value.</li>
+</ul>
+<p>What I’d like to do is introduce two similar, but <em>very</em> different acting bits of code:</p>
+<h4 id="staticcc"><a class="header" href="#staticcc"><a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/blob/master/src/bug-hall-of-fame/static-initialization.d/static.cc"><code>static.cc</code></a></a></h4>
+<pre><code class="language-cpp">static const uint8_t PIN_ENCODER_CHANNEL_A = 2;
+static const uint8_t PIN_ENCODER_CHANNEL_B = 3;
+
+static volatile int32_t steps;
+
+void channel_a_isr(void)
+{
+  static bool A = digitalRead(PIN_ENCODER_CHANNEL_A);
+  static bool B = digitalRead(PIN_ENCODER_CHANNEL_B);
+
+  steps += A ^ B ? 1 : -1;
+}
+</code></pre>
+<h4 id="intcc"><a class="header" href="#intcc"><a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/blob/master/src/bug-hall-of-fame/static-initialization.d/int.cc"><code>int.cc</code></a></a></h4>
+<pre><code class="language-cpp">static const uint8_t PIN_ENCODER_CHANNEL_A = 2;
+static const uint8_t PIN_ENCODER_CHANNEL_B = 3;
+
+static volatile int32_t steps;
+
+void channel_a_isr(void)
+{
+  int A = digitalRead(PIN_ENCODER_CHANNEL_A);
+  int B = digitalRead(PIN_ENCODER_CHANNEL_B);
+
+  steps += A ^ B ? 1 : -1;
+}
+</code></pre>
+<hr />
+<p>In this case, <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/blob/master/src/bug-hall-of-fame/static-initialization.d/int.cc"><code>int.cc</code></a> works while <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/blob/master/src/bug-hall-of-fame/static-initialization.d/static.cc"><code>static.cc</code></a> does not!</p>
+<h2 id="a-deep-dive"><a class="header" href="#a-deep-dive">A Deep Dive</a></h2>
+<p>The astute reader may have already spotted the mistake; I for one did not on my first time around.<sup class="footnote-reference" id="fr-tunnel-vission-1"><a href="#footnote-tunnel-vission">1</a></sup>
+Part of why this code had me pulling my hair out was the expression <code>steps += A ^ B ? 1 : -1</code>, which did different things between people in the class.
+Initially, I suspected some strange integer promotion being done by the compiler, but this necessitated a deeper analysis!</p>
+<h3 id="assembly-output"><a class="header" href="#assembly-output">Assembly Output</a></h3>
+<p>What I ended up doing was extracting <em>some</em> of the <a href="https://github.com/arduino/ArduinoCore-avr/blob/1.8.6/platform.txt">compilation flags from the Arduino AVR core</a> and <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/blob/master/src/bug-hall-of-fame/static-initialization.d/Makefile">manually compiling</a> a code sample with <code>avr-g++</code>.
+Conveniently, GCC offers the <code>-S</code> and <code>-fverbose-asm</code> flags, which output assembly and add verbose assembly comments, respectively.
+Throwing this together, we get the following (unoptimized) output for a subset of <code>channel_a_isr</code>:</p>
+<h4 id="statics"><a class="header" href="#statics"><a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/blob/master/src/bug-hall-of-fame/static-initialization.d/static.s"><code>static.s</code></a></a></h4>
+<pre><code> ;  static.cc:13:   static bool A = digitalRead(PIN_ENCODER_CHANNEL_A);
+	ldi r24,lo8(_ZGVZ13channel_a_isrvE1A)	 ;  _ZGVZ13channel_a_isrvE1A.0_1,
+	ldi r25,hi8(_ZGVZ13channel_a_isrvE1A)	 ;  _ZGVZ13channel_a_isrvE1A.0_1,
+	movw r30,r24	 ; , _ZGVZ13channel_a_isrvE1A.0_1
+	ld r24,Z		 ;  _2, MEM[(char *)_ZGVZ13channel_a_isrvE1A.0_1]
+	cp r24, __zero_reg__	 ;  _2
+	brne .L2		 ; ,
+ ;  static.cc:13:   static bool A = digitalRead(PIN_ENCODER_CHANNEL_A);
+	ldi r24,lo8(2)	 ; ,
+	call digitalRead	 ; 
+	ldi r18,lo8(1)	 ;  _4,
+	sbiw r24,0	 ;  _3,
+	brne .L3		 ; ,
+	ldi r18,0		 ;  _4
+.L3:
+ ;  static.cc:13:   static bool A = digitalRead(PIN_ENCODER_CHANNEL_A);
+	sts _ZZ13channel_a_isrvE1A,r18	 ;  A, _4
+	ldi r24,lo8(_ZGVZ13channel_a_isrvE1A)	 ;  _ZGVZ13channel_a_isrvE1A.1_5,
+	ldi r25,hi8(_ZGVZ13channel_a_isrvE1A)	 ;  _ZGVZ13channel_a_isrvE1A.1_5,
+	ldi r18,lo8(1)	 ;  tmp59,
+	movw r30,r24	 ; , _ZGVZ13channel_a_isrvE1A.1_5
+	st Z,r18		 ;  MEM[(char *)_ZGVZ13channel_a_isrvE1A.1_5], tmp59
+.L2:
+ ;  static.cc:14:   static bool B = digitalRead(PIN_ENCODER_CHANNEL_B);
+	ldi r24,lo8(_ZGVZ13channel_a_isrvE1B)	 ;  _ZGVZ13channel_a_isrvE1B.2_6,
+	ldi r25,hi8(_ZGVZ13channel_a_isrvE1B)	 ;  _ZGVZ13channel_a_isrvE1B.2_6,
+	movw r30,r24	 ; , _ZGVZ13channel_a_isrvE1B.2_6
+	ld r24,Z		 ;  _7, MEM[(char *)_ZGVZ13channel_a_isrvE1B.2_6]
+	cp r24, __zero_reg__	 ;  _7
+	brne .L4		 ; ,
+ ;  static.cc:14:   static bool B = digitalRead(PIN_ENCODER_CHANNEL_B);
+	ldi r24,lo8(3)	 ; ,
+	call digitalRead	 ; 
+	ldi r18,lo8(1)	 ;  _9,
+	sbiw r24,0	 ;  _8,
+	brne .L5		 ; ,
+	ldi r18,0		 ;  _9
+.L5:
+ ;  static.cc:14:   static bool B = digitalRead(PIN_ENCODER_CHANNEL_B);
+	sts _ZZ13channel_a_isrvE1B,r18	 ;  B, _9
+	ldi r24,lo8(_ZGVZ13channel_a_isrvE1B)	 ;  _ZGVZ13channel_a_isrvE1B.3_10,
+	ldi r25,hi8(_ZGVZ13channel_a_isrvE1B)	 ;  _ZGVZ13channel_a_isrvE1B.3_10,
+	ldi r18,lo8(1)	 ;  tmp61,
+	movw r30,r24	 ; , _ZGVZ13channel_a_isrvE1B.3_10
+	st Z,r18		 ;  MEM[(char *)_ZGVZ13channel_a_isrvE1B.3_10], tmp61
+.L4:
+ ;  static.cc:16:   steps += A ^ B ? 1 : -1;
+	lds r25,_ZZ13channel_a_isrvE1A	 ;  A.5_11, A
+	lds r24,_ZZ13channel_a_isrvE1B	 ;  B.6_12, B
+ ;  static.cc:16:   steps += A ^ B ? 1 : -1;
+	cp r25,r24		 ;  A.5_11, B.6_12
+	breq .L6		 ; ,
+ ;  static.cc:16:   steps += A ^ B ? 1 : -1;
+	ldi r24,lo8(1)	 ;  iftmp.4_15,
+	ldi r25,0		 ;  iftmp.4_15
+	ldi r26,0		 ;  iftmp.4_15
+	ldi r27,0		 ;  iftmp.4_15
+	rjmp .L7		 ; 
+.L6:
+ ;  static.cc:16:   steps += A ^ B ? 1 : -1;
+	ldi r24,lo8(-1)	 ;  iftmp.4_15,
+	ldi r25,lo8(-1)	 ;  iftmp.4_15,
+	movw r26,r24	 ;  iftmp.4_15
+.L7:
+ ;  static.cc:16:   steps += A ^ B ? 1 : -1;
+	lds r20,_ZL5steps	 ;  steps.7_13, steps
+	lds r21,_ZL5steps+1	 ;  steps.7_13, steps
+	lds r22,_ZL5steps+2	 ;  steps.7_13, steps
+	lds r23,_ZL5steps+3	 ;  steps.7_13, steps
+	add r24,r20	 ;  _14, steps.7_13
+	adc r25,r21	 ;  _14, steps.7_13
+	adc r26,r22	 ;  _14, steps.7_13
+	adc r27,r23	 ;  _14, steps.7_13
+	sts _ZL5steps,r24	 ;  steps, _14
+	sts _ZL5steps+1,r25	 ;  steps, _14
+	sts _ZL5steps+2,r26	 ;  steps, _14
+	sts _ZL5steps+3,r27	 ;  steps, _14
+</code></pre>
+<h4 id="ints"><a class="header" href="#ints"><a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/blob/master/src/bug-hall-of-fame/static-initialization.d/int.s"><code>int.s</code></a></a></h4>
+<pre><code> ;  int.cc:13:   int A = digitalRead(PIN_ENCODER_CHANNEL_A);
+	ldi r24,lo8(2)	 ; ,
+	call digitalRead	 ; 
+	std Y+2,r25	 ;  A,
+	std Y+1,r24	 ;  A,
+ ;  int.cc:14:   int B = digitalRead(PIN_ENCODER_CHANNEL_B);
+	ldi r24,lo8(3)	 ; ,
+	call digitalRead	 ; 
+	std Y+4,r25	 ;  B,
+	std Y+3,r24	 ;  B,
+ ;  int.cc:16:   steps += A ^ B ? 1 : -1;
+	ldd r18,Y+1	 ;  tmp46, A
+	ldd r19,Y+2	 ;  tmp46, A
+	ldd r24,Y+3	 ;  tmp47, B
+	ldd r25,Y+4	 ;  tmp47, B
+	cp r18,r24	 ;  tmp46, tmp47
+	cpc r19,r25	 ;  tmp46, tmp47
+	breq .L2		 ; ,
+ ;  int.cc:16:   steps += A ^ B ? 1 : -1;
+	ldi r24,lo8(1)	 ;  iftmp.0_3,
+	ldi r25,0		 ;  iftmp.0_3
+	ldi r26,0		 ;  iftmp.0_3
+	ldi r27,0		 ;  iftmp.0_3
+	rjmp .L3		 ; 
+.L2:
+ ;  int.cc:16:   steps += A ^ B ? 1 : -1;
+	ldi r24,lo8(-1)	 ;  iftmp.0_3,
+	ldi r25,lo8(-1)	 ;  iftmp.0_3,
+	movw r26,r24	 ;  iftmp.0_3
+.L3:
+ ;  int.cc:16:   steps += A ^ B ? 1 : -1;
+	lds r20,_ZL5steps	 ;  steps.1_1, steps
+	lds r21,_ZL5steps+1	 ;  steps.1_1, steps
+	lds r22,_ZL5steps+2	 ;  steps.1_1, steps
+	lds r23,_ZL5steps+3	 ;  steps.1_1, steps
+	add r24,r20	 ;  _2, steps.1_1
+	adc r25,r21	 ;  _2, steps.1_1
+	adc r26,r22	 ;  _2, steps.1_1
+	adc r27,r23	 ;  _2, steps.1_1
+	sts _ZL5steps,r24	 ;  steps, _2
+	sts _ZL5steps+1,r25	 ;  steps, _2
+	sts _ZL5steps+2,r26	 ;  steps, _2
+	sts _ZL5steps+3,r27	 ;  steps, _2
+</code></pre>
+<p>This output can be hard to interpret if you’ve never read or written assembly before, but I’d like to draw your attention to one thing: the difference in function body length for the <code>static</code> case.
+Again, for the seasoned C programmer, this hint might be a dead giveaway; however, let us probe a bit further.</p>
+<p>Let’s take a closer look at the following block in <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/blob/master/src/bug-hall-of-fame/static-initialization.d/static.s"><code>static.s</code></a>:</p>
+<pre><code> ;  static.cc:13:   static bool A = digitalRead(PIN_ENCODER_CHANNEL_A);
+	ldi r24,lo8(_ZGVZ13channel_a_isrvE1A)	 ;  _ZGVZ13channel_a_isrvE1A.0_1,
+	ldi r25,hi8(_ZGVZ13channel_a_isrvE1A)	 ;  _ZGVZ13channel_a_isrvE1A.0_1,
+	movw r30,r24	 ; , _ZGVZ13channel_a_isrvE1A.0_1
+	ld r24,Z		 ;  _2, MEM[(char *)_ZGVZ13channel_a_isrvE1A.0_1]
+	cp r24, __zero_reg__	 ;  _2
+	brne .L2		 ; ,
+ ;  static.cc:13:   static bool A = digitalRead(PIN_ENCODER_CHANNEL_A);
+	ldi r24,lo8(2)	 ; ,
+	call digitalRead	 ; 
+	ldi r18,lo8(1)	 ;  _4,
+	sbiw r24,0	 ;  _3,
+	brne .L3		 ; ,
+	ldi r18,0		 ;  _4
+.L3:
+ ;  static.cc:13:   static bool A = digitalRead(PIN_ENCODER_CHANNEL_A);
+	sts _ZZ13channel_a_isrvE1A,r18	 ;  A, _4
+	ldi r24,lo8(_ZGVZ13channel_a_isrvE1A)	 ;  _ZGVZ13channel_a_isrvE1A.1_5,
+	ldi r25,hi8(_ZGVZ13channel_a_isrvE1A)	 ;  _ZGVZ13channel_a_isrvE1A.1_5,
+	ldi r18,lo8(1)	 ;  tmp59,
+	movw r30,r24	 ; , _ZGVZ13channel_a_isrvE1A.1_5
+	st Z,r18		 ;  MEM[(char *)_ZGVZ13channel_a_isrvE1A.1_5], tmp59
+.L2:
+ ;  static.cc:14:   static bool B = digitalRead(PIN_ENCODER_CHANNEL_B);
+	ldi r24,lo8(_ZGVZ13channel_a_isrvE1B)	 ;  _ZGVZ13channel_a_isrvE1B.2_6,
+</code></pre>
+<p>In particular, <code>cp r24, __zero_reg__</code> followed by <code>brne .L2</code>.</p>
+<p>This bit of assembly essentially skips over our call to <a href="https://docs.arduino.cc/language-reference/en/functions/digital-io/digitalwrite/"><code>digitalWrite()</code></a> when the byte stored at <code>_ZGVZ13channel_a_isrvE1A.0_1</code><sup class="footnote-reference" id="fr-name-mangling-1"><a href="#footnote-name-mangling">2</a></sup> is a non-zero value.
+Unfortunately for us, this byte is always set to <code>1</code> following a call to <a href="https://docs.arduino.cc/language-reference/en/functions/digital-io/digitalwrite/"><code>digitalWrite()</code></a>.
+The emission of these instructions stems from the <a href="https://timsong-cpp.github.io/cppwp/n4659/dcl.stc#4"><code>static</code> storage class specifier</a>, the <a href="https://timsong-cpp.github.io/cppwp/n4659/stmt.dcl#4">dynamic initialization of variables with the <code>static</code> storage class</a>, and their <a href="https://timsong-cpp.github.io/cppwp/n4659/basic.stc.static#def:static_storage_duration">storage duration</a>.</p>
+<h2 id="so-what-does-this-mean"><a class="header" href="#so-what-does-this-mean">So What Does this Mean?</a></h2>
+<p>Converting the C++17 draft to plain English: <strong>assignment to <code>static</code> variables in the function scope is done once</strong>.
+In particular, the first time the function executes.
+What this means for <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/blob/master/src/bug-hall-of-fame/static-initialization.d/static.cc"><code>static.cc</code></a> is that the values of <code>A</code> and <code>B</code> do not change following the first invocation of the <a href="https://docs.arduino.cc/language-reference/en/functions/external-interrupts/attachInterrupt/#parameters"><code>CHANGE</code> interrupt</a>.
+As you can imagine, we can either get stuck counting in one direction, or we have the channel A and B ISRs fighting with one another, and <code>steps</code> oscillates!<sup class="footnote-reference" id="fr-oscillations-1"><a href="#footnote-oscillations">3</a></sup></p>
+<hr>
+<ol class="footnote-definition"><li id="footnote-tunnel-vission">
+<p>It’s crazy what kind of tunnel vision you can have while mortified at the thought of misguiding everyone with a hint! <a href="#fr-tunnel-vission-1">↩</a></p>
+</li>
+<li id="footnote-name-mangling">
+<p>The reason why our <code>static</code> variable <code>A</code> has such a strange name is due to C++ name mangling. <a href="#fr-name-mangling-1">↩</a></p>
+</li>
+<li id="footnote-oscillations">
+<p>For the few of you that experienced this bug, you may have noticed that the encoder count slowly changed given enough aggressive spinning of the encoder. Skipped interrupts are to blame! <a href="#fr-oscillations-1">↩</a></p>
+</li>
+</ol>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../bug-hall-of-fame/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../how-tos/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../bug-hall-of-fame/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../how-tos/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr-ef4e11c1.min.js"></script>
+        <script src="../mark-09e88c2c.min.js"></script>
+        <script src="../searcher-9aeb6ddf.js"></script>
+
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-9576a2db.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>
