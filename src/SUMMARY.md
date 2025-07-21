@@ -18,6 +18,7 @@
   - [Button Debounce](examples/button-debounce.md)
   - [Circular Buffer](examples/circular-buffer.md)
   - [Lookup Tables](examples/lookup-tables.md)
+  - [State Machine](examples/state-machine.md)
   - [Timer Delay](examples/timer-delay.md)
   - [Ultrasonic Interrupt](examples/ultrasonic-interrupt.md)
 - [Bug Hall of Fame](bug-hall-of-fame/README.md)
