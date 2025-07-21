@@ -50,7 +50,7 @@ Throwing this together, we get the following (unoptimized) output for a subset o
 ```
 
 This output can be hard to interpret if you've never read or written assembly before, but I'd like to draw your attention to one thing: the difference in function body length for the `static` case.
-Again, for the seasoned C programmer, this hint might be a dead giveaway; however, let us probe a bit further.
+Again, for the seasoned C++ programmer, this hint might be a dead giveaway; however, let us probe a bit further.
 
 Let's take a closer look at the following block in [`static.s`]:
 
