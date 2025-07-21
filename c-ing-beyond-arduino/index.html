@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Encoder Steps - cu-summer-stem-embedded-systems</title>
+        <title>C-ing Beyond Arduino - cu-summer-stem-embedded-systems</title>
 
 
         <!-- Custom HTML head -->
@@ -147,7 +147,7 @@
                         <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/edit/master/src/solutions/encoder-steps.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                        <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/edit/master/src/c-ing-beyond-arduino/README.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -181,129 +181,21 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="encoder-steps"><a class="header" href="#encoder-steps">Encoder Steps</a></h1>
-<pre><code class="language-cpp">// SPDX-License-Identifier: MPL-2.0
-/*
- * encoder steps
- * Copyright (C) 2025  Jacob Koziej &lt;jacobkoziej@gmail.com&gt;
- */
-
-#include "encoder.h"
-
-const static uint32_t BAUD = 115200;
-
-void setup(void)
-{
-  encoder_setup();
-
-  Serial.begin(BAUD);
-}
-
-void loop(void)
-{
-  Serial.println(encoder_steps());
-}
-</code></pre>
-<h2 id="encodercc"><a class="header" href="#encodercc"><code>encoder.cc</code></a></h2>
-<pre><code class="language-cpp">// SPDX-License-Identifier: MPL-2.0
-/*
- * encoder.cc -- encoder steps
- * Copyright (C) 2025  Jacob Koziej &lt;jacobkoziej@gmail.com&gt;
- */
-
-#include "encoder.h"
-
-#include "pins.h"
-
-#include &lt;Arduino.h&gt;
-#include &lt;stdint.h&gt;
-
-static volatile uint32_t steps;
-
-static void channel_isr(bool reverse)
-{
-	const uint8_t A = digitalRead(PIN_ENCODER_CHANNEL_A);
-	const uint8_t B = digitalRead(PIN_ENCODER_CHANNEL_B);
-
-	steps += A ^ B ^ reverse ? 1 : -1;
-}
-
-static void channel_a_isr(void)
-{
-	channel_isr(false);
-}
-
-static void channel_b_isr(void)
-{
-	channel_isr(true);
-}
-
-void encoder_setup(void)
-{
-	pinMode(PIN_ENCODER_CHANNEL_A, INPUT);
-	pinMode(PIN_ENCODER_CHANNEL_B, INPUT);
-
-	steps = 0;
-
-	attachInterrupt(
-		digitalPinToInterrupt(PIN_ENCODER_CHANNEL_A),
-		channel_a_isr,
-		CHANGE);
-	attachInterrupt(
-		digitalPinToInterrupt(PIN_ENCODER_CHANNEL_B),
-		channel_b_isr,
-		CHANGE);
-}
-
-uint32_t encoder_steps(void)
-{
-	return steps;
-}
-</code></pre>
-<h2 id="encoderh"><a class="header" href="#encoderh"><code>encoder.h</code></a></h2>
-<pre><code class="language-cpp">// SPDX-License-Identifier: MPL-2.0
-/*
- * encoder.h -- encoder steps
- * Copyright (C) 2025  Jacob Koziej &lt;jacobkoziej@gmail.com&gt;
- */
-
-#ifndef ENCODER_STEPS_ENCODER_H
-#define ENCODER_STEPS_ENCODER_H
-
-#include &lt;stdint.h&gt;
-
-void     encoder_setup(void);
-uint32_t encoder_steps(void);
-
-#endif  // ENCODER_STEPS_ENCODER_H
-</code></pre>
-<h2 id="pinsh"><a class="header" href="#pinsh"><code>pins.h</code></a></h2>
-<pre><code class="language-cpp">// SPDX-License-Identifier: MPL-2.0
-/*
- * pins.h -- pinout
- * Copyright (C) 2025  Jacob Koziej &lt;jacobkoziej@gmail.com&gt;
- */
-
-#ifndef ENCODER_STEPS_PINS_H
-#define ENCODER_STEPS_PINS_H
-
-#include &lt;stdint.h&gt;
-
-const static uint8_t PIN_ENCODER_CHANNEL_A = 2;
-const static uint8_t PIN_ENCODER_CHANNEL_B = 3;
-
-#endif  // ENCODER_STEPS_PINS_H
-</code></pre>
+                        <h1 id="c-ing-beyond-arduino"><a class="header" href="#c-ing-beyond-arduino">C-ing Beyond Arduino</a></h1>
+<p>Tentative schedule:</p>
+<ul>
+<li><strong>2025-07-22:</strong> <a href="hello-again.html">Hello, Again!?</a></li>
+</ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../solutions/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../background/interrupts.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../solutions/scrolling-quad-seven-segment-display.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../c-ing-beyond-arduino/hello-again.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -313,11 +205,11 @@ const static uint8_t PIN_ENCODER_CHANNEL_B = 3;
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../solutions/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../background/interrupts.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../solutions/scrolling-quad-seven-segment-display.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../c-ing-beyond-arduino/hello-again.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

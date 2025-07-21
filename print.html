@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-b1dff274.js";
+            window.path_to_searchindex_js = "searchindex-aa5c91e9.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-e7a24ba9.js"></script>
+        <script src="toc-500bf745.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -579,6 +579,39 @@ Your state machine should have the following states:</p>
 <ol>
 <li>Utilize interrupts to keep track of encoder steps.
 Create a separate source file that encapsulates your encoder functionality and expose the current encoder steps with a function that has the following signature: <code>uint32_t encoder_steps(void)</code>.</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="c-ing-beyond-arduino-1"><a class="header" href="#c-ing-beyond-arduino-1">C-ing Beyond Arduino</a></h1>
+<p>Tentative schedule:</p>
+<ul>
+<li><strong>2025-07-22:</strong> <a href="c-ing-beyond-arduino/hello-again.html">Hello, Again!?</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="hello-again"><a class="header" href="#hello-again">Hello, Again!?</a></h1>
+<p><em>Let’s run it back.</em></p>
+<h2 id="outline-7"><a class="header" href="#outline-7">Outline</a></h2>
+<ul>
+<li>Using the shell:
+<ul>
+<li>File paths</li>
+<li>Core utilities</li>
+<li><code>man</code> pages</li>
+</ul>
+</li>
+<li>Compilation process</li>
+<li>Compiler flags</li>
+<li><code>Makefile</code>s</li>
+<li><code>load</code>ing programs with <code>avr-gdb</code></li>
+<li>Reading:
+<ul>
+<li>Schematics</li>
+<li>Datasheets</li>
+</ul>
+</li>
+<li>Digital IO with port registers</li>
+</ul>
+<h2 id="exercises-6"><a class="header" href="#exercises-6">Exercises</a></h2>
+<ol>
+<li>Blink the built-in LED of the Arduino Uno Rev3.</li>
+<li>Toggle the built-in LED of the Arduino Uno Rev3 using a push button.</li>
 </ol>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="examples"><a class="header" href="#examples">Examples</a></h1>
 <ul>
