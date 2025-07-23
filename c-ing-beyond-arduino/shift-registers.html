@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Lookup Tables - cu-summer-stem-embedded-systems</title>
+        <title>Shift Registers - cu-summer-stem-embedded-systems</title>
 
 
         <!-- Custom HTML head -->
@@ -147,7 +147,7 @@
                         <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/edit/master/src/examples/lookup-tables.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                        <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/edit/master/src/c-ing-beyond-arduino/shift-registers.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -181,57 +181,28 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="lookup-tables"><a class="header" href="#lookup-tables">Lookup Tables</a></h1>
-<pre><code class="language-cpp">enum {
-  RED,
-  GREEN,
-  BLUE,
-  COLORS_TOTAL,
-};
-
-static const uint16_t ADC_MAX = (1 &lt;&lt; 10) - 1;
-static const uint8_t  PWM_MAX = (1 &lt;&lt; 8)  - 1;
-
-static const uint8_t COLOR_TO_PIN[COLORS_TOTAL] = {
-  [RED]   = 9,
-  [GREEN] = 10,
-  [BLUE]  = 11,
-};
-
-static const uint8_t POTENTIOMETER_TO_PIN[COLORS_TOTAL] = {
-  [RED]   = A0,
-  [GREEN] = A1,
-  [BLUE]  = A2,
-};
-
-void setup(void)
-{
-  for (size_t i = 0; i &lt; COLORS_TOTAL; i++) {
-    pinMode(POTENTIOMETER_TO_PIN[i], INPUT);
-
-    pinMode(COLOR_TO_PIN[i], OUTPUT);
-    digitalWrite(COLOR_TO_PIN[i], LOW);
-  };
-}
-
-void loop(void)
-{
-  for (size_t i = 0; i &lt; COLORS_TOTAL; i++) {
-    const uint16_t sample = analogRead(POTENTIOMETER_TO_PIN[i]);
-    analogWrite(COLOR_TO_PIN[i], map(sample, 0, ADC_MAX, 0, PWM_MAX));
-  }
-}
-</code></pre>
+                        <h1 id="shift-registers"><a class="header" href="#shift-registers">Shift Registers</a></h1>
+<p><em>Why worry about IO when you can throw more at the problem?</em></p>
+<h2 id="outline"><a class="header" href="#outline">Outline</a></h2>
+<ul>
+<li>Shift registers</li>
+</ul>
+<h2 id="exercises"><a class="header" href="#exercises">Exercises</a></h2>
+<ol>
+<li>Take your quad seven-segment project and port it over to AVR C.
+Instead of setting the state of each segment individually, map them to PORT D so that they can all update in one write.</li>
+<li>Now, take your code from the previous exercise, but instead use a shift register to control the individual segments.</li>
+</ol>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../examples/circular-buffer.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../c-ing-beyond-arduino/hello-again.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../examples/makefile.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../examples/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -241,11 +212,11 @@ void loop(void)
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../examples/circular-buffer.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../c-ing-beyond-arduino/hello-again.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../examples/makefile.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../examples/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

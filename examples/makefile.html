@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Lookup Tables - cu-summer-stem-embedded-systems</title>
+        <title>Makefile - cu-summer-stem-embedded-systems</title>
 
 
         <!-- Custom HTML head -->
@@ -147,7 +147,7 @@
                         <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/edit/master/src/examples/lookup-tables.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                        <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/edit/master/src/examples/makefile.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -181,57 +181,44 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="lookup-tables"><a class="header" href="#lookup-tables">Lookup Tables</a></h1>
-<pre><code class="language-cpp">enum {
-  RED,
-  GREEN,
-  BLUE,
-  COLORS_TOTAL,
-};
+                        <h1 id="makefile"><a class="header" href="#makefile">Makefile</a></h1>
+<pre><code class="language-Makefile">CC      = avr-gcc
+CFLAGS += \
+	-DF_CPU=16000000ULL \
+	-O0 \
+	-Wall \
+	-Wextra \
+	-Wpedantic \
+	-g \
+	-mmcu=atmega328p \
+	-std=gnu17 \
 
-static const uint16_t ADC_MAX = (1 &lt;&lt; 10) - 1;
-static const uint8_t  PWM_MAX = (1 &lt;&lt; 8)  - 1;
+.PHONY: all
+all: main.elf
 
-static const uint8_t COLOR_TO_PIN[COLORS_TOTAL] = {
-  [RED]   = 9,
-  [GREEN] = 10,
-  [BLUE]  = 11,
-};
+.PHONY: clean
+clean:
+	@rm -rvf *.d *.elf *.o
 
-static const uint8_t POTENTIOMETER_TO_PIN[COLORS_TOTAL] = {
-  [RED]   = A0,
-  [GREEN] = A1,
-  [BLUE]  = A2,
-};
+main.elf: main.o foo.o bar.o
+	$(CC) $(CFLAGS) -o $@ $^
 
-void setup(void)
-{
-  for (size_t i = 0; i &lt; COLORS_TOTAL; i++) {
-    pinMode(POTENTIOMETER_TO_PIN[i], INPUT);
+%.o: %.c
+	$(CC) $(CFLAGS) -MM -MF $*.d $&lt;
+	$(CC) $(CFLAGS) -c $&lt;
 
-    pinMode(COLOR_TO_PIN[i], OUTPUT);
-    digitalWrite(COLOR_TO_PIN[i], LOW);
-  };
-}
-
-void loop(void)
-{
-  for (size_t i = 0; i &lt; COLORS_TOTAL; i++) {
-    const uint16_t sample = analogRead(POTENTIOMETER_TO_PIN[i]);
-    analogWrite(COLOR_TO_PIN[i], map(sample, 0, ADC_MAX, 0, PWM_MAX));
-  }
-}
+-include $(wildcard *.d)
 </code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../examples/circular-buffer.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../examples/lookup-tables.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../examples/makefile.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../examples/state-machine.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -241,11 +228,11 @@ void loop(void)
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../examples/circular-buffer.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../examples/lookup-tables.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../examples/makefile.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../examples/state-machine.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
