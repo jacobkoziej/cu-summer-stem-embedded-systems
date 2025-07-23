@@ -11,6 +11,7 @@
 - [Explain Shell](https://explainshell.com/)
 - [Homebrew AVR Toolchain](https://github.com/osx-cross/homebrew-avr)
 - [Homebrew](https://brew.sh/)
+- [Makefile Tutorial By Example](https://makefiletutorial.com/)
 - [ManKier](https://www.mankier.com/)
 - [TLDR Pages](https://tldr.sh/)
 - [WSL Installation](https://learn.microsoft.com/en-us/windows/wsl/install)
