@@ -15,3 +15,4 @@
 - [ManKier](https://www.mankier.com/)
 - [TLDR Pages](https://tldr.sh/)
 - [WSL Installation](https://learn.microsoft.com/en-us/windows/wsl/install)
+- [cdecl](https://cdecl.org/)
