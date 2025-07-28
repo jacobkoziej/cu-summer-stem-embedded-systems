@@ -1,13 +1,14 @@
 # Useful Links
 
+- [Arduino Language Reference](https://docs.arduino.cc/language-reference/)
+- [Arduino Uno Rev3 Hardware Information](https://docs.arduino.cc/hardware/uno-rev3/)
 - [ATmega328P Datasheet](https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/Atmel-7810-Automotive-Microcontrollers-ATmega328P_Datasheet.pdf)
 - [ATmega48A/PA/88A/PA/168A/PA/328/P Datasheet](https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/ATmega48A-PA-88A-PA-168A-PA-328-P-DS-DS40002061B.pdf)
 - [AVR Application Notes](https://www.professordan.com/avr/techlib/techlib8/appnotes/)
 - [AVR GCC Application Binary Interface](https://gcc.gnu.org/wiki/avr-gcc#ABI)
 - [AVR-LibC Documentation](https://avrdudes.github.io/avr-libc/)
 - [AVRDUDE Documentation](https://avrdudes.github.io/avrdude/)
-- [Arduino Language Reference](https://docs.arduino.cc/language-reference/)
-- [Arduino Uno Rev3 Hardware Information](https://docs.arduino.cc/hardware/uno-rev3/)
+- [cdecl](https://cdecl.org/)
 - [Explain Shell](https://explainshell.com/)
 - [Homebrew AVR Toolchain](https://github.com/osx-cross/homebrew-avr)
 - [Homebrew](https://brew.sh/)
@@ -15,4 +16,3 @@
 - [ManKier](https://www.mankier.com/)
 - [TLDR Pages](https://tldr.sh/)
 - [WSL Installation](https://learn.microsoft.com/en-us/windows/wsl/install)
-- [cdecl](https://cdecl.org/)
