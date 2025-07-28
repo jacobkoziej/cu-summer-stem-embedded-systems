@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Button Debounce - cu-summer-stem-embedded-systems</title>
+        <title>Pointers - cu-summer-stem-embedded-systems</title>
 
 
         <!-- Custom HTML head -->
@@ -147,7 +147,7 @@
                         <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/edit/master/src/examples/button-debounce.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                        <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/edit/master/src/c-ing-beyond-arduino/pointers.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -181,48 +181,78 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="button-debounce"><a class="header" href="#button-debounce">Button Debounce</a></h1>
-<pre><code class="language-cpp">static const uint8_t BUTTON = 2;
-
-static const uint8_t DEBOUNCE_MS = 4;
-
-static bool button_state;
-
-void setup(void)
-{
-  pinMode(BUTTON, INPUT);
-
-  pinMode(LED_BUILTIN, OUTPUT);
-
-  digitalWrite(LED_BUILTIN, button_state);
-}
-
-void loop(void)
-{
-  // get our initial sample of the button
-  bool button_sample = digitalRead(BUTTON);
-
-  // wait for the button to settle
-  delay(DEBOUNCE_MS);
-
-  // if the current sample is the same as the
-  // previous we assume the new button state
-  if (digitalRead(BUTTON) == button_sample)
-    button_state = button_sample;
-
-  digitalWrite(LED_BUILTIN, button_state);
-}
-</code></pre>
+                        <h1 id="pointers"><a class="header" href="#pointers">Pointers</a></h1>
+<p><em>If you thought shooting yourself in the foot hurt, just wait till you blow off your leg!</em></p>
+<h2 id="outline"><a class="header" href="#outline">Outline</a></h2>
+<ul>
+<li>Harvard vs Von Neumann architecture</li>
+<li>Pointers:
+<ul>
+<li><code>NULL</code></li>
+<li>Pointer arithmetic</li>
+<li><code>uintptr_t</code></li>
+</ul>
+</li>
+<li>Multi-level pointers</li>
+<li>Function pointers</li>
+<li><code>void</code> pointers</li>
+<li><code>_Static_assert()</code></li>
+</ul>
+<h2 id="exercises"><a class="header" href="#exercises">Exercises</a></h2>
+<ol>
+<li>
+<p>Let’s make our own digital IO functions like the Arduino framework!</p>
+<ol>
+<li>
+<p>Create <code>digital.c</code> and <code>digital.h</code> files; these will store your digital IO functionality.</p>
+</li>
+<li>
+<p>Create a function with the following signature: <code>volatile uint8_t *digital_pin_to_port(uint8_t pin)</code>.
+If you reference the register summary of the ATmega328P datasheet, you’ll see that the port registers reside next to one another; use this information to your advantage to simplify your logic.
+If the user specifies an invalid pin number, return <code>NULL</code>.</p>
+</li>
+<li>
+<p><code>typedef</code> an <code>enum</code> called <code>digital_register_type_t</code> to let us specify if we’re interested in <code>PORTx</code>, <code>DDRx</code>, or <code>PINx</code> of a port register.</p>
+</li>
+<li>
+<p>Create a function with the following signature: <code>volatile uint8_t *digital_port_offset(volatile uint8_t * const port, digital_register_type_t type)</code>.
+If you define <code>digital_register_type_t</code> in a clever manner, you can simply add the value of <code>type</code> to <code>port</code> to get the correct offset.
+To make sure this works as intended, add static assertions to your header to make sure that your <code>enum</code> values are indeed valid offsets.</p>
+</li>
+<li>
+<p>Create a function with the following signature: <code>int digital_pin_to_bit(uint8_t pin)</code>.
+This function should return the bit offset of a pin inside a port register.
+If the user specifies an invalid pin number, return <code>-1</code>.</p>
+</li>
+<li>
+<p><code>typedef</code> an <code>enum</code> called <code>digital_mode_t</code> to let us specify if we’re interested in <code>INPUT</code>, <code>OUTPUT</code>, or <code>INPUT_PULLUP</code>.</p>
+</li>
+<li>
+<p>Create functions with the following signatures:</p>
+<ul>
+<li><code>bool digital_pin_mode(uint8_t pin, digital_mode_t mode)</code></li>
+<li><code>bool digital_write(uint8_t pin, bool high)</code></li>
+<li><code>bool digital_read(uint8_t pin, bool * const pin_state)</code></li>
+</ul>
+<p>These functions should make calls to all three of the previous helper functions to simplify the internals and return <code>true</code> or <code>false</code> to indicate the success of execution.</p>
+</li>
+</ol>
+</li>
+<li>
+<p>Rewrite your vending machine state machine to utilize a lookup table of function pointers to remove the existing <code>switch</code>-<code>case</code>.
+Remove all uses of global variables; instead, pass a pointer to a shared <code>static struct</code> in your state machine function.</p>
+</li>
+</ol>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../examples/ascii-remap.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../c-ing-beyond-arduino/shift-registers.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../examples/circular-buffer.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../examples/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -232,11 +262,11 @@ void loop(void)
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../examples/ascii-remap.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../c-ing-beyond-arduino/shift-registers.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../examples/circular-buffer.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../examples/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

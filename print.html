@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-ac94ae25.js";
+            window.path_to_searchindex_js = "searchindex-155eb546.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-c65216c2.js"></script>
+        <script src="toc-628c7897.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -585,6 +585,7 @@ Create a separate source file that encapsulates your encoder functionality and e
 <ul>
 <li><strong>2025-07-22:</strong> <a href="c-ing-beyond-arduino/hello-again.html">Hello, Again!?</a></li>
 <li><strong>2025-07-23:</strong> <a href="c-ing-beyond-arduino/shift-registers.html">Shift Registers</a></li>
+<li><strong>2025-07-28:</strong> <a href="c-ing-beyond-arduino/pointers.html">Pointers</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="hello-again"><a class="header" href="#hello-again">Hello, Again!?</a></h1>
 <p><em>Let’s run it back.</em></p>
@@ -625,6 +626,68 @@ Create a separate source file that encapsulates your encoder functionality and e
 <li>Take your quad seven-segment project and port it over to AVR C.
 Instead of setting the state of each segment individually, map them to PORT D so that they can all update in one write.</li>
 <li>Now, take your code from the previous exercise, but instead use a shift register to control the individual segments.</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="pointers"><a class="header" href="#pointers">Pointers</a></h1>
+<p><em>If you thought shooting yourself in the foot hurt, just wait till you blow off your leg!</em></p>
+<h2 id="outline-9"><a class="header" href="#outline-9">Outline</a></h2>
+<ul>
+<li>Harvard vs Von Neumann architecture</li>
+<li>Pointers:
+<ul>
+<li><code>NULL</code></li>
+<li>Pointer arithmetic</li>
+<li><code>uintptr_t</code></li>
+</ul>
+</li>
+<li>Multi-level pointers</li>
+<li>Function pointers</li>
+<li><code>void</code> pointers</li>
+<li><code>_Static_assert()</code></li>
+</ul>
+<h2 id="exercises-8"><a class="header" href="#exercises-8">Exercises</a></h2>
+<ol>
+<li>
+<p>Let’s make our own digital IO functions like the Arduino framework!</p>
+<ol>
+<li>
+<p>Create <code>digital.c</code> and <code>digital.h</code> files; these will store your digital IO functionality.</p>
+</li>
+<li>
+<p>Create a function with the following signature: <code>volatile uint8_t *digital_pin_to_port(uint8_t pin)</code>.
+If you reference the register summary of the ATmega328P datasheet, you’ll see that the port registers reside next to one another; use this information to your advantage to simplify your logic.
+If the user specifies an invalid pin number, return <code>NULL</code>.</p>
+</li>
+<li>
+<p><code>typedef</code> an <code>enum</code> called <code>digital_register_type_t</code> to let us specify if we’re interested in <code>PORTx</code>, <code>DDRx</code>, or <code>PINx</code> of a port register.</p>
+</li>
+<li>
+<p>Create a function with the following signature: <code>volatile uint8_t *digital_port_offset(volatile uint8_t * const port, digital_register_type_t type)</code>.
+If you define <code>digital_register_type_t</code> in a clever manner, you can simply add the value of <code>type</code> to <code>port</code> to get the correct offset.
+To make sure this works as intended, add static assertions to your header to make sure that your <code>enum</code> values are indeed valid offsets.</p>
+</li>
+<li>
+<p>Create a function with the following signature: <code>int digital_pin_to_bit(uint8_t pin)</code>.
+This function should return the bit offset of a pin inside a port register.
+If the user specifies an invalid pin number, return <code>-1</code>.</p>
+</li>
+<li>
+<p><code>typedef</code> an <code>enum</code> called <code>digital_mode_t</code> to let us specify if we’re interested in <code>INPUT</code>, <code>OUTPUT</code>, or <code>INPUT_PULLUP</code>.</p>
+</li>
+<li>
+<p>Create functions with the following signatures:</p>
+<ul>
+<li><code>bool digital_pin_mode(uint8_t pin, digital_mode_t mode)</code></li>
+<li><code>bool digital_write(uint8_t pin, bool high)</code></li>
+<li><code>bool digital_read(uint8_t pin, bool * const pin_state)</code></li>
+</ul>
+<p>These functions should make calls to all three of the previous helper functions to simplify the internals and return <code>true</code> or <code>false</code> to indicate the success of execution.</p>
+</li>
+</ol>
+</li>
+<li>
+<p>Rewrite your vending machine state machine to utilize a lookup table of function pointers to remove the existing <code>switch</code>-<code>case</code>.
+Remove all uses of global variables; instead, pass a pointer to a shared <code>static struct</code> in your state machine function.</p>
+</li>
 </ol>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="examples"><a class="header" href="#examples">Examples</a></h1>
 <ul>
