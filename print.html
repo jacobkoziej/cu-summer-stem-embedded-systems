@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-e6312a5f.js";
+            window.path_to_searchindex_js = "searchindex-f60be265.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-628c7897.js"></script>
+        <script src="toc-fdcbb7f5.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -586,6 +586,7 @@ Create a separate source file that encapsulates your encoder functionality and e
 <li><strong>2025-07-22:</strong> <a href="c-ing-beyond-arduino/hello-again.html">Hello, Again!?</a></li>
 <li><strong>2025-07-23:</strong> <a href="c-ing-beyond-arduino/shift-registers.html">Shift Registers</a></li>
 <li><strong>2025-07-28:</strong> <a href="c-ing-beyond-arduino/pointers.html">Pointers</a></li>
+<li><strong>2025-07-30:</strong> <a href="c-ing-beyond-arduino/timers-&amp;-pwm.html">Timers &amp; PWM</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="hello-again"><a class="header" href="#hello-again">Hello, Again!?</a></h1>
 <p><em>Let’s run it back.</em></p>
@@ -688,6 +689,35 @@ If the user specifies an invalid pin number, return <code>-1</code>.</p>
 <p>Rewrite your vending machine state machine to utilize a lookup table of function pointers to remove the existing <code>switch</code>-<code>case</code>.
 Remove all uses of global variables; instead, pass a pointer to a shared <code>static struct</code> in your state machine function.</p>
 </li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="timers--pwm"><a class="header" href="#timers--pwm">Timers &amp; PWM</a></h1>
+<p><em>Good design demands good compromise.</em></p>
+<h2 id="outline-10"><a class="header" href="#outline-10">Outline</a></h2>
+<ul>
+<li>SREG</li>
+<li>Timers:
+<ul>
+<li>Groups</li>
+<li>Prescalers</li>
+<li>Interrupt sources</li>
+<li>Clear conditions</li>
+</ul>
+</li>
+<li>PWM:
+<ul>
+<li>Output compare unit</li>
+<li>Fast PWM</li>
+<li>Phase correct PWM</li>
+</ul>
+</li>
+<li>AVR-LIBC ISRs</li>
+</ul>
+<h2 id="exercises-9"><a class="header" href="#exercises-9">Exercises</a></h2>
+<ol>
+<li>Create your function to keep track of microseconds.
+This function should utilize an 8-bit timer and an overflow interrupt to return an accurate 64-bit result.</li>
+<li>Set the highest clock prescaler for the 16-bit timer and observe how different PWM modes behave when switching output compare values between <code>1 &lt;&lt; 15</code> and <code>1 &lt;&lt; 14</code>.
+Make sure to utilize the output compare interrupt to make switching between these two values seamless.</li>
 </ol>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="examples"><a class="header" href="#examples">Examples</a></h1>
 <ul>

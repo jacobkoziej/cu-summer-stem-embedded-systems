@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Timer Delay - cu-summer-stem-embedded-systems</title>
+        <title>Timers &amp; PWM - cu-summer-stem-embedded-systems</title>
 
 
         <!-- Custom HTML head -->
@@ -147,7 +147,7 @@
                         <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/edit/master/src/examples/timer-delay.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                        <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/edit/master/src/c-ing-beyond-arduino/timers-&amp;-pwm.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -181,40 +181,45 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="timer-delay"><a class="header" href="#timer-delay">Timer Delay</a></h1>
-<pre><code class="language-cpp">static const uint32_t DELAY_US = 500000;
-
-static uint32_t previous_time_us;
-
-void setup(void)
-{
-  digitalWrite(LED_BUILTIN, LOW);
-  pinMode(LED_BUILTIN, OUTPUT);
-
-  previous_time_us = micros();
-}
-
-void loop(void)
-{
-  uint32_t current_time_us;
-
-  if ((current_time_us = micros()) - previous_time_us &gt;= DELAY_US) {
-    digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
-
-    previous_time_us = current_time_us;
-  }
-}
-</code></pre>
+                        <h1 id="timers--pwm"><a class="header" href="#timers--pwm">Timers &amp; PWM</a></h1>
+<p><em>Good design demands good compromise.</em></p>
+<h2 id="outline"><a class="header" href="#outline">Outline</a></h2>
+<ul>
+<li>SREG</li>
+<li>Timers:
+<ul>
+<li>Groups</li>
+<li>Prescalers</li>
+<li>Interrupt sources</li>
+<li>Clear conditions</li>
+</ul>
+</li>
+<li>PWM:
+<ul>
+<li>Output compare unit</li>
+<li>Fast PWM</li>
+<li>Phase correct PWM</li>
+</ul>
+</li>
+<li>AVR-LIBC ISRs</li>
+</ul>
+<h2 id="exercises"><a class="header" href="#exercises">Exercises</a></h2>
+<ol>
+<li>Create your function to keep track of microseconds.
+This function should utilize an 8-bit timer and an overflow interrupt to return an accurate 64-bit result.</li>
+<li>Set the highest clock prescaler for the 16-bit timer and observe how different PWM modes behave when switching output compare values between <code>1 &lt;&lt; 15</code> and <code>1 &lt;&lt; 14</code>.
+Make sure to utilize the output compare interrupt to make switching between these two values seamless.</li>
+</ol>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../examples/state-machine.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../c-ing-beyond-arduino/pointers.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../examples/ultrasonic-interrupt.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../examples/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -224,11 +229,11 @@ void loop(void)
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../examples/state-machine.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../c-ing-beyond-arduino/pointers.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../examples/ultrasonic-interrupt.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../examples/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
