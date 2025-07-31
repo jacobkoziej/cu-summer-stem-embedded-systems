@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-f60be265.js";
+            window.path_to_searchindex_js = "searchindex-d6b7fd1c.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-fdcbb7f5.js"></script>
+        <script src="toc-1f0f76cc.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -587,6 +587,7 @@ Create a separate source file that encapsulates your encoder functionality and e
 <li><strong>2025-07-23:</strong> <a href="c-ing-beyond-arduino/shift-registers.html">Shift Registers</a></li>
 <li><strong>2025-07-28:</strong> <a href="c-ing-beyond-arduino/pointers.html">Pointers</a></li>
 <li><strong>2025-07-30:</strong> <a href="c-ing-beyond-arduino/timers-&amp;-pwm.html">Timers &amp; PWM</a></li>
+<li><strong>2025-07-31:</strong> <a href="c-ing-beyond-arduino/twi.html">2-wire Serial Interface</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="hello-again"><a class="header" href="#hello-again">Hello, Again!?</a></h1>
 <p><em>Let’s run it back.</em></p>
@@ -719,7 +720,108 @@ This function should utilize an 8-bit timer and an overflow interrupt to return 
 <li>Set the highest clock prescaler for the 16-bit timer and observe how different PWM modes behave when switching output compare values between <code>1 &lt;&lt; 15</code> and <code>1 &lt;&lt; 14</code>.
 Make sure to utilize the output compare interrupt to make switching between these two values seamless.</li>
 </ol>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="examples"><a class="header" href="#examples">Examples</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="2-wire-serial-interface"><a class="header" href="#2-wire-serial-interface">2-wire Serial Interface</a></h1>
+<p><em>“Did you know that the 2-wire serial interface is compatible with Phillips’ I2C protocol!?” - Matthew Jeong</em></p>
+<h2 id="outline-11"><a class="header" href="#outline-11">Outline</a></h2>
+<ul>
+<li>I2C:
+<ul>
+<li>SDA &amp; SCL</li>
+<li>Master vs slave devices</li>
+<li>START and STOP conditions</li>
+<li>Addressing</li>
+<li>Reading vs writing</li>
+<li>ACK vs NACK</li>
+<li>Multi-master configuration</li>
+</ul>
+</li>
+<li>TWI:
+<ul>
+<li>Modes of operation</li>
+<li>TWI registers</li>
+<li>Clock generation</li>
+<li>TWI interrupt</li>
+</ul>
+</li>
+<li>MPU-6050:
+<ul>
+<li>Applications</li>
+<li>Requesting data</li>
+<li>External interrupt</li>
+</ul>
+</li>
+<li>Drivers:
+<ul>
+<li>Definition</li>
+<li>Non-blocking, interrupt-driven design</li>
+</ul>
+</li>
+</ul>
+<h2 id="project-1"><a class="header" href="#project-1">Project</a></h2>
+<p><em>MPU-6050 driver.</em></p>
+<ol>
+<li>
+<p>Create a <code>twi</code> translation unit for your TWI driver.
+This translation unit must at the very least contain the following functions:</p>
+<ul>
+<li><code>twi_status_t twi_init(const uint8_t scl_frequency)</code></li>
+<li><code>twi_status_t twi_enqueue(twi_message_t *messages, size_t count)</code></li>
+<li><code>twi_status_t twi_status(void)</code></li>
+<li><code>twi_status_t twi_cancel(void)</code></li>
+<li><code>twi_status_t twi_deinit(void)</code></li>
+</ul>
+<p>To simplify this assignment, we’ll only consider master mode operation.
+To make our lives significantly easier, I suggest we take the following steps:</p>
+<ol>
+<li>Set the associated digital IO ports to inputs with their internal pull-up resistors enabled.
+This will allow us to avoid having to attach external pull-up resistors. However, please note that with these enabled, we can’t set the SCL’s frequency above 100 kHz.</li>
+<li><code>typedef</code> an <code>enum</code> called <code>twi_status_t</code>.
+This <code>enum</code> should contain a list of TWI status codes your functions can return to indicate success, failure, or nominal operation.</li>
+<li><code>typedef</code> a <code>struct</code> called <code>twi_message_t</code>.
+This <code>struct</code> should contain a pointer to a <code>uint8_t</code> buffer our driver can read from/write to, along with a size for this buffer in bytes.</li>
+<li>Define a <code>static</code> function for calculating our clock pre-scaler and <code>TWBR</code> values given an SCL frequency.</li>
+<li>Populate <code>ISR(TWI_vect)</code> with an empty <code>switch</code>-<code>case</code> using constants defined in <a href="https://avrdudes.github.io/avr-libc/avr-libc-user-manual/group__util__twi.html"><code>&lt;util/twi.h&gt;</code></a> related to master mode.
+Instead of directly <code>switch</code>ing on <code>TWSR</code>, utilize the <code>TW_STATUS</code> macro as it will automatically mask non-zero pre-scaler bits.
+Do note that a few of the status operations can be the same, so fall-through <code>case</code>s might be useful to reduce code duplication.</li>
+<li>Create a <code>static struct</code> local to the <code>twi</code> translation unit that will contain all variables we might share between the ISR and regular functions.</li>
+<li><code>twi_init()</code> should set the SCL frequency on a best-effort basis, along with initializing the TWI peripheral to be in an idle state.
+This function is also a great point to set default values for any variables we will use in our ISR.</li>
+<li><code>twi_enqueue()</code> should pass a pointer to a message or array of messages (if we intend to utilize the repeat START condition) along with a count of the number of messages we’ll be transmitting to internal variables used in our ISR before successfully returning to the caller.
+There should also be some basic checks in place here to ensure that we don’t interrupt an existing operation.
+In the case of an ongoing operation, we should fail gracefully and return control to the caller.</li>
+<li>At this point, we can start filling out our <code>switch</code>-<code>case</code> in our ISR.
+I recommend looking at <a href="https://ww1.microchip.com/downloads/aemDocuments/documents/OTH/ApplicationNotes/ApplicationNotes/00002480A.pdf">application note AVR315</a>, which guides you through an <a href="https://ww1.microchip.com/downloads/en/AppNotes/Atmel-2564-Using-the-TWI-Module-as-I2C-Master_ApplicationNote_AVR315.zip">example master TWI driver</a>.<sup class="footnote-reference" id="fr-warning-1"><a href="#footnote-warning">1</a></sup>
+If you read the AVR315 application note or ATmega328P datasheet, you’ll notice that the TWI peripheral is a state machine we control with a handful of registers.
+I suggest tracing out possible execution paths and finding terminal states on success or failure.
+In either case, you should pass status information to the user, along with indicating that the operation has concluded.</li>
+<li><code>twi_status()</code> gives our calling code a glimpse into what’s happening in the background so that it can act accordingly.
+Once the enqueued TWI operation is complete, this function should return success to the caller, who can access any read data or enqueue a new operation.</li>
+<li>In the case of the I2C bus failing, you may want to timeout an operation.
+<code>twi_cancel()</code> serves the purpose of rescuing our code from this limbo as opposed to hanging like older versions of the <a href="https://docs.arduino.cc/language-reference/en/functions/communication/wire/">Arduino Wire library</a>.</li>
+<li>Finally, add the ability to disable TWI entirely with <code>twi_deinit()</code>.
+In the case of an ongoing operation or an uninitialized TWI peripheral, this function should fail gracefully.</li>
+</ol>
+</li>
+<li>
+<p>Create an <code>mpu-6050</code> translation unit for your MPU-6050 driver.
+<strong>Functions and steps are TBD.</strong></p>
+</li>
+</ol>
+<hr>
+<ol class="footnote-definition"><li id="footnote-warning">
+<p>Be highly skeptical of manufacturer code or other code you find on the internet!
+At least for the Atmel code linked above, it includes a few mistakes and poor design decisions:</p>
+<ul>
+<li>Unbounded busy loops checking <code>TWINT</code>, which may never be unset if the I2C bus is disconnected.</li>
+<li>Variables shared between regular functions and the ISR that are not <code>volatile</code>.</li>
+<li><code>TWSR</code> pre-scaler bits are not masked when checking TWI status bits, so a non-zero pre-scaler renders the driver useless.</li>
+<li><code>TWCR</code> is always overwritten, irrespective of user settings.
+For example, a user may wish to keep <code>TWEA</code> disabled for whatever reason.</li>
+<li>Time and space get wasted copying buffered data to an internal TWI data buffer.</li>
+</ul>
+<p>There might not be all the errors, but the point still stands: code from manufacturers or the general internet should be nothing more than a reference and/or starting point, as opposed to an infallible source of truth! <a href="#fr-warning-1">↩</a></p>
+</li>
+</ol><div style="break-before: page; page-break-before: always;"></div><h1 id="examples"><a class="header" href="#examples">Examples</a></h1>
 <ul>
 <li><a href="examples/ascii-remap.html">ASCII Remap</a></li>
 <li><a href="examples/button-debounce.html">Button Debounce</a></li>
