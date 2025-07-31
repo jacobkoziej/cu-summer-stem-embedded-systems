@@ -18,6 +18,7 @@
   - [Shift Registers](c-ing-beyond-arduino/shift-registers.md)
   - [Pointers](c-ing-beyond-arduino/pointers.md)
   - [Timers & PWM](c-ing-beyond-arduino/timers-&-pwm.md)
+  - [2-wire Serial Interface](c-ing-beyond-arduino/twi.md)
 - [Examples](examples/README.md)
   - [ASCII Remap](examples/ascii-remap.md)
   - [Button Debounce](examples/button-debounce.md)
