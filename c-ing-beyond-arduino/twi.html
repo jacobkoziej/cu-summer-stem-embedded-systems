@@ -36,7 +36,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-d6b7fd1c.js";
+            window.path_to_searchindex_js = "../searchindex-10639fb8.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-1f0f76cc.js"></script>
@@ -225,7 +225,7 @@
 <p>Create a <code>twi</code> translation unit for your TWI driver.
 This translation unit must at the very least contain the following functions:</p>
 <ul>
-<li><code>twi_status_t twi_init(const uint8_t scl_frequency)</code></li>
+<li><code>twi_status_t twi_init(const uint32_t scl_frequency)</code></li>
 <li><code>twi_status_t twi_enqueue(twi_message_t *messages, size_t count)</code></li>
 <li><code>twi_status_t twi_status(void)</code></li>
 <li><code>twi_status_t twi_cancel(void)</code></li>
