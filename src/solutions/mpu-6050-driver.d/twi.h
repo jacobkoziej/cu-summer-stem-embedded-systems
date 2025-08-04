@@ -29,9 +29,9 @@ typedef enum twi_status {
 } twi_status_t;
 
 typedef struct twi_message {
-	uint8_t        address;
-	unsigned char *buffer;
-	size_t         size;
+	uint8_t  address;
+	uint8_t *buffer;
+	size_t   size;
 } twi_message_t;
 
 static const uint8_t TWI_READ = TW_READ;
