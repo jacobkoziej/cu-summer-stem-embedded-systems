@@ -35,6 +35,8 @@ twi_status_t twi_cancel(void)
 
 	TWCR = twcr;
 
+	clear_twsto();
+
 	SREG = sreg;
 
 	return TWI_STATUS_SUCCESS;
@@ -136,6 +138,20 @@ twi_status_t twi_status(void)
 	return status;
 }
 
+static void clear_twsto(void)
+{
+	// If a user enqueues a new set of messages while the STOP
+	// condition is asserted on the bus, triggering a START
+	// condition will result in a bus error. To avoid this, we wait
+	// for TWSTO to be automatically get cleared by hardware. This
+	// does however introduce an unavoidable delay of ~15 us in our
+	// code (when running at 16 MHz) which is irritating, however,
+	// it's a tradeoff worth making if it means users of our driver
+	// don't need to deal with spurious bus errors.
+	while (TWCR & (1 << TWSTO))
+		continue;
+}
+
 static void return_isr(const twi_status_t status)
 {
 	twi_isr = (twi_isr_t) {
@@ -231,6 +247,9 @@ ISR(TWI_vect)
 
 				TWCR |= 1 << bit;
 
+				if (bit == TWSTO)
+					clear_twsto();
+
 				return;
 			}
 
@@ -259,6 +278,9 @@ ISR(TWI_vect)
 					return_isr(TWI_STATUS_SUCCESS);
 
 				TWCR |= 1 << bit;
+
+				if (bit == TWSTO)
+					clear_twsto();
 
 				return;
 			}
@@ -302,4 +324,6 @@ error:
 	return_isr(status);
 
 	TWCR |= 1 << TWSTO;
+
+	clear_twsto();
 }

@@ -22,6 +22,7 @@ typedef struct twi_isr {
 	size_t         message_count;
 } twi_isr_t;
 
+static void clear_twsto(void);
 static void return_isr(const twi_status_t status);
 static bool scl_to_bitrate(
 	const uint32_t f_scl,
