@@ -33,7 +33,7 @@
    This translation unit must at the very least contain the following functions:
 
    - `twi_status_t twi_init(const uint32_t scl_frequency)`
-   - `twi_status_t twi_enqueue(twi_message_t *messages, size_t count)`
+   - `twi_status_t twi_enqueue(twi_message_t *messages, size_t message_count)`
    - `twi_status_t twi_status(void)`
    - `twi_status_t twi_cancel(void)`
    - `twi_status_t twi_deinit(void)`
