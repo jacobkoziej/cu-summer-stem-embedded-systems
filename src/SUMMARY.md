@@ -36,6 +36,7 @@
   - [debugWire](how-tos/debugwire.md)
 - [Solutions](solutions/README.md)
   - [Encoder Steps](solutions/encoder-steps.md)
+  - [MPU-6050 Driver](solutions/mpu-6050-driver.md)
   - [Scrolling Quad Seven-Segment Display](solutions/scrolling-quad-seven-segment-display.md)
 
 ---
