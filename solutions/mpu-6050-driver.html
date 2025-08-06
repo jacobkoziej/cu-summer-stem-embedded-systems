@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Encoder Steps - cu-summer-stem-embedded-systems</title>
+        <title>MPU-6050 Driver - cu-summer-stem-embedded-systems</title>
 
 
         <!-- Custom HTML head -->
@@ -147,7 +147,7 @@
                         <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/edit/master/src/solutions/encoder-steps.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                        <a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/edit/master/src/solutions/mpu-6050-driver.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -181,129 +181,490 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="encoder-steps"><a class="header" href="#encoder-steps">Encoder Steps</a></h1>
+                        <h1 id="mpu-6050-driver"><a class="header" href="#mpu-6050-driver">MPU-6050 Driver</a></h1>
 <pre><code class="language-cpp">// SPDX-License-Identifier: MPL-2.0
 /*
- * encoder steps
+ * main.c -- sample code to interface with MPU-6050 over TWI
  * Copyright (C) 2025  Jacob Koziej &lt;jacobkoziej@gmail.com&gt;
  */
 
-#include "encoder.h"
+#include &lt;avr/io.h&gt;
+#include &lt;avr/interrupt.h&gt;
+#include &lt;stdint.h&gt;
+#include &lt;stdlib.h&gt;
 
-const static uint32_t BAUD = 115200;
+#include "twi.h"
 
-void setup(void)
+const uint32_t SCL_FREQUENCY = 100000;
+
+int main(void)
 {
-  encoder_setup();
+	sei();
 
-  Serial.begin(BAUD);
-}
+	uint8_t pin_mask = (1 &lt;&lt; PC5) | (1 &lt;&lt; PC4);
 
-void loop(void)
-{
-  Serial.println(encoder_steps());
+	DDRC  &amp;= ~pin_mask;
+	PORTC |=  pin_mask;
+
+	twi_status_t status = twi_init(SCL_FREQUENCY);
+
+	if (status != TWI_STATUS_SUCCESS)
+		return EXIT_FAILURE;
+
+	return EXIT_SUCCESS;
 }
 </code></pre>
-<h2 id="encodercc"><a class="header" href="#encodercc"><code>encoder.cc</code></a></h2>
+<h2 id="twih"><a class="header" href="#twih"><a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/blob/master/src/solutions/mpu-6050-driver.d/twi.h"><code>twi.h</code></a></a></h2>
 <pre><code class="language-cpp">// SPDX-License-Identifier: MPL-2.0
 /*
- * encoder.cc -- encoder steps
+ * twi.h -- two-wire serial interface master
  * Copyright (C) 2025  Jacob Koziej &lt;jacobkoziej@gmail.com&gt;
  */
 
-#include "encoder.h"
+#ifndef TWI_H
+#define TWI_H
 
-#include "pins.h"
+#include &lt;stddef.h&gt;
+#include &lt;stddef.h&gt;
+#include &lt;stdint.h&gt;
+#include &lt;util/twi.h&gt;
 
-#include &lt;Arduino.h&gt;
+typedef enum twi_status {
+	TWI_STATUS_SUCCESS,
+	TWI_STATUS_ARBITRATION_LOST,
+	TWI_STATUS_BUSY,
+	TWI_STATUS_BUS_ERROR,
+	TWI_STATUS_CANCELLED,
+	TWI_STATUS_DISABLED,
+	TWI_STATUS_DOUBLE_INIT,
+	TWI_STATUS_FAILURE,
+	TWI_STATUS_INVALID_ADDRESS,
+	TWI_STATUS_INVALID_SCL,
+	TWI_STATUS_NACK,
+	TWI_STATUS_NO_INFO,
+	TWI_STATUS_WRITE_COLLISION,
+} twi_status_t;
+
+typedef struct twi_message {
+	uint8_t  address;
+	uint8_t *buffer;
+	size_t   size;
+} twi_message_t;
+
+static const uint8_t TWI_READ = TW_READ;
+static const uint8_t TWI_WRITE = TW_WRITE;
+
+twi_status_t twi_cancel(void);
+twi_status_t twi_deinit(void);
+twi_status_t twi_enqueue(twi_message_t * const messages, size_t message_count);
+twi_status_t twi_init(const uint32_t scl_frequency);
+twi_status_t twi_status(void);
+
+#endif  // TWI_H
+</code></pre>
+<h2 id="privatetwih"><a class="header" href="#privatetwih"><a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/blob/master/src/solutions/mpu-6050-driver.d/private/twi.h"><code>private/twi.h</code></a></a></h2>
+<pre><code class="language-cpp">// SPDX-License-Identifier: MPL-2.0
+/*
+ * twi.h -- two-wire serial interface master
+ * Copyright (C) 2025  Jacob Koziej &lt;jacobkoziej@gmail.com&gt;
+ */
+
+#ifndef PRIVATE_TWI_H
+#define PRIVATE_TWI_H
+
+#include "../twi.h"
+
+#include &lt;stdbool.h&gt;
+#include &lt;stddef.h&gt;
 #include &lt;stdint.h&gt;
 
-static volatile uint32_t steps;
+static const size_t TWI_MR_FINAL_BYTE = 1;
 
-static void channel_isr(bool reverse)
+typedef struct twi_isr {
+	bool           idle;
+	twi_status_t   status;
+	twi_message_t *messages;
+	size_t         message_count;
+} twi_isr_t;
+
+static void clear_twsto(void);
+static void return_isr(const twi_status_t status);
+static bool scl_to_bitrate(
+	const uint32_t f_scl,
+	uint8_t * const twbr,
+	uint8_t * const twps);
+
+#endif  // PRIVATE_TWI_H
+</code></pre>
+<h2 id="twic"><a class="header" href="#twic"><a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/blob/master/src/solutions/mpu-6050-driver.d/twi.c"><code>twi.c</code></a></a></h2>
+<pre><code class="language-cpp">// SPDX-License-Identifier: MPL-2.0
+/*
+ * twi.c -- two-wire serial interface master
+ * Copyright (C) 2025  Jacob Koziej &lt;jacobkoziej@gmail.com&gt;
+ */
+
+#include "twi.h"
+#include "private/twi.h"
+
+#include &lt;avr/interrupt.h&gt;
+#include &lt;avr/io.h&gt;
+#include &lt;limits.h&gt;
+#include &lt;stdbool.h&gt;
+#include &lt;stddef.h&gt;
+#include &lt;stdint.h&gt;
+#include &lt;util/twi.h&gt;
+
+static volatile twi_isr_t twi_isr;
+
+twi_status_t twi_cancel(void)
 {
-	const uint8_t A = digitalRead(PIN_ENCODER_CHANNEL_A);
-	const uint8_t B = digitalRead(PIN_ENCODER_CHANNEL_B);
+	const uint8_t sreg = SREG;
 
-	steps += A ^ B ^ reverse ? 1 : -1;
+	cli();
+
+	twi_isr = (twi_isr_t) {
+		.idle   = true,
+		.status = TWI_STATUS_CANCELLED,
+	};
+
+	uint8_t twcr = TWCR;
+
+	twcr &amp;= 1 &lt;&lt; TWSTA;
+	twcr |= 1 &lt;&lt; TWSTO;
+
+	TWCR = twcr;
+
+	clear_twsto();
+
+	SREG = sreg;
+
+	return TWI_STATUS_SUCCESS;
 }
 
-static void channel_a_isr(void)
+twi_status_t twi_deinit(void)
 {
-	channel_isr(false);
+	if (twi_status() == TWI_STATUS_BUSY)
+		return TWI_STATUS_BUSY;
+
+	TWCR = 1 &lt;&lt; TWINT;
+
+	return TWI_STATUS_SUCCESS;
 }
 
-static void channel_b_isr(void)
+twi_status_t twi_enqueue(twi_message_t * const messages, size_t message_count)
 {
-	channel_isr(true);
+	const uint8_t sreg = SREG;
+
+	cli();
+
+	const uint8_t twcr = TWCR;
+	const bool    idle = twi_isr.idle;
+
+	SREG = sreg;
+
+	if (!(twcr &amp; (1 &lt;&lt; TWEN)))
+		return TWI_STATUS_DISABLED;
+
+	if (!idle)
+		return TWI_STATUS_BUSY;
+
+	twi_isr = (twi_isr_t) {
+		.idle          = false,
+		.messages      = messages,
+		.message_count = message_count,
+	};
+
+
+	TWCR = twcr | (1 &lt;&lt; TWSTA);
+
+	return TWI_STATUS_SUCCESS;
 }
 
-void encoder_setup(void)
+twi_status_t twi_init(const uint32_t scl_frequency)
 {
-	pinMode(PIN_ENCODER_CHANNEL_A, INPUT);
-	pinMode(PIN_ENCODER_CHANNEL_B, INPUT);
+	const uint8_t sreg = SREG;
 
-	steps = 0;
+	cli();
 
-	attachInterrupt(
-		digitalPinToInterrupt(PIN_ENCODER_CHANNEL_A),
-		channel_a_isr,
-		CHANGE);
-	attachInterrupt(
-		digitalPinToInterrupt(PIN_ENCODER_CHANNEL_B),
-		channel_b_isr,
-		CHANGE);
+	const bool double_init = TWCR &amp; (1 &lt;&lt; TWEN);
+
+	SREG = sreg;
+
+	if (double_init)
+		return TWI_STATUS_DOUBLE_INIT;
+
+	uint8_t twbr;
+	uint8_t twps;
+
+	if (!scl_to_bitrate(scl_frequency, &amp;twbr, &amp;twps))
+		return TWI_STATUS_INVALID_SCL;
+
+	TWBR = twbr;
+	TWSR = twps;
+
+	TWAR = ~(1 &lt;&lt; TWGCE);
+	TWAMR = 0xFF;
+
+	TWCR
+		= (1 &lt;&lt; TWINT)
+		| (0 &lt;&lt; TWEA)
+		| (0 &lt;&lt; TWSTA)
+		| (0 &lt;&lt; TWSTO)
+		| (1 &lt;&lt; TWEN)
+		| (1 &lt;&lt; TWIE);
+
+	twi_isr = (twi_isr_t) {
+		.idle = true,
+		.status = TWI_STATUS_SUCCESS,
+	};
+
+	return TWI_STATUS_SUCCESS;
 }
 
-uint32_t encoder_steps(void)
+twi_status_t twi_status(void)
 {
-	return steps;
+	const uint8_t sreg = SREG;
+
+	cli();
+
+	const twi_status_t status
+		= twi_isr.idle
+		? twi_isr.status
+		: TWI_STATUS_BUSY;
+
+	SREG = sreg;
+
+	return status;
+}
+
+static void clear_twsto(void)
+{
+	// If a user enqueues a new set of messages while the STOP
+	// condition is asserted on the bus, triggering a START
+	// condition will result in a bus error. To avoid this, we wait
+	// for TWSTO to be automatically get cleared by hardware. This
+	// does however introduce an unavoidable delay of ~15 us in our
+	// code (when running at 16 MHz) which is irritating, however,
+	// it's a tradeoff worth making if it means users of our driver
+	// don't need to deal with spurious bus errors.
+	while (TWCR &amp; (1 &lt;&lt; TWSTO))
+		continue;
+}
+
+static void return_isr(const twi_status_t status)
+{
+	twi_isr = (twi_isr_t) {
+		.idle   = true,
+		.status = status,
+	};
+}
+
+static bool scl_to_bitrate(
+	const uint32_t f_scl,
+	uint8_t * const twbr,
+	uint8_t * const twps)
+{
+	// To avoid float-based division we perform a fixed-point
+	// division by left shifting by 32. For this assumption to hold,
+	// we must ensure that F_CPU stays below 1ULL &lt;&lt; 32.
+	static_assert(
+		F_CPU &lt; (1ULL &lt;&lt; 32),
+		"F_CPU must be less than 1ULL &lt;&lt; 32");
+	const uint64_t f_cpu = F_CPU &lt;&lt; 32;
+
+	// We have that F_SCL = F_CPU / (16 + (2 * TWBR * prescale)).
+	// To solve for TWBR and the prescale value iteratively, we
+	// rearrange this equality to the expression below.
+	const uint64_t target = ((f_cpu / f_scl) - (16ULL &lt;&lt; 32)) / 2;
+
+	const bool f_cpu_sufficient = target &gt;&gt; 32;
+	if (!f_cpu_sufficient) return false;
+
+	for (*twps = 0; *twps &lt; 4; (*twps)++) {
+		const uint8_t prescaler = 1 &lt;&lt; (*twps * 2);
+
+		const uint64_t result = target / prescaler;
+		const uint32_t potential_twbr
+			= (result &gt;&gt; 32) + ((bool) (result &amp; (1ULL &lt;&lt; 31)));
+
+		// We've exhausted our prescaler.
+		if (!potential_twbr)
+			break;
+
+		if (potential_twbr &lt;= UINT8_MAX) {
+			*twbr = potential_twbr;
+			return true;
+		}
+	}
+
+	return false;
+}
+
+ISR(TWI_vect)
+{
+	static unsigned char *buffer;
+	static size_t         size;
+
+	twi_status_t status = TWI_STATUS_FAILURE;
+
+	if (TWCR &amp; (1 &lt;&lt; TWWC)) {
+		status = TWI_STATUS_WRITE_COLLISION;
+		goto error;
+	}
+
+	twi_message_t * const message = twi_isr.messages;
+
+	switch (TW_STATUS) {
+		case TW_START:
+		case TW_REP_START:
+			TWDR = message-&gt;address;
+
+			buffer = message-&gt;buffer;
+			size   = message-&gt;size;
+
+			uint8_t twcr = TWCR &amp; ~(1 &lt;&lt; TWSTA);
+
+			const bool mr_mode = message-&gt;address &amp; 1;
+
+			if (mr_mode)
+				twcr |= 1 &lt;&lt; TWEA;
+
+			TWCR = twcr;
+
+			return;
+
+		case TW_MT_SLA_ACK:
+		case TW_MT_DATA_ACK:
+			if (!size--) {
+				const uint8_t bit
+					= --twi_isr.message_count
+					? ++twi_isr.messages, TWSTA
+					: TWSTO;
+
+				if (bit == TWSTO)
+					return_isr(TWI_STATUS_SUCCESS);
+
+				TWCR |= 1 &lt;&lt; bit;
+
+				if (bit == TWSTO)
+					clear_twsto();
+
+				return;
+			}
+
+			TWDR  = *(buffer++);
+			TWCR |= 1 &lt;&lt; TWINT;
+
+			return;
+
+		case TW_MR_DATA_NACK:
+			if (size-- != TWI_MR_FINAL_BYTE) {
+				status = TWI_STATUS_NACK;
+
+				break;
+			}
+
+			[[fallthrough]];
+
+		case TW_MR_DATA_ACK:
+			if (!size--) {
+				const uint8_t bit
+					= --twi_isr.message_count
+					? ++twi_isr.messages, TWSTA
+					: TWSTO;
+
+				if (bit == TWSTO)
+					return_isr(TWI_STATUS_SUCCESS);
+
+				TWCR |= 1 &lt;&lt; bit;
+
+				if (bit == TWSTO)
+					clear_twsto();
+
+				return;
+			}
+
+			*(buffer++) = TWDR;
+
+			[[fallthrough]];
+
+		case TW_MR_SLA_ACK:
+			TWCR
+				= size == TWI_MR_FINAL_BYTE
+				? TWCR &amp; ~(1 &lt;&lt; TWEA)
+				: TWCR;
+
+			return;
+
+		case TW_MR_SLA_NACK:
+		case TW_MT_DATA_NACK:
+		case TW_MT_SLA_NACK:
+			status = TWI_STATUS_NACK;
+			break;
+
+		//   TW_MT_ARB_LOST:
+		case TW_MR_ARB_LOST:
+			status = TWI_STATUS_ARBITRATION_LOST;
+			break;
+
+		case TW_NO_INFO:
+			status = TWI_STATUS_NO_INFO;
+			break;
+
+		case TW_BUS_ERROR:
+			status = TWI_STATUS_BUS_ERROR;
+			break;
+
+		default:
+			break;
+	}
+
+error:
+	return_isr(status);
+
+	TWCR |= 1 &lt;&lt; TWSTO;
+
+	clear_twsto();
 }
 </code></pre>
-<h2 id="encoderh"><a class="header" href="#encoderh"><code>encoder.h</code></a></h2>
-<pre><code class="language-cpp">// SPDX-License-Identifier: MPL-2.0
-/*
- * encoder.h -- encoder steps
- * Copyright (C) 2025  Jacob Koziej &lt;jacobkoziej@gmail.com&gt;
- */
+<h2 id="makefile"><a class="header" href="#makefile"><a href="https://github.com/jacobkoziej/cu-summer-stem-embedded-systems/blob/master/src/solutions/mpu-6050-driver.d/Makefile"><code>Makefile</code></a></a></h2>
+<pre><code class="language-cpp">CC      = avr-gcc
+CFLAGS += \
+	-DF_CPU=16000000ULL \
+	-O0 \
+	-Wall \
+	-Wextra \
+	-Wpedantic \
+	-g \
+	-mmcu=atmega328p \
+	-std=c23 \
 
-#ifndef ENCODER_STEPS_ENCODER_H
-#define ENCODER_STEPS_ENCODER_H
+.PHONY: all
+all: main.elf
 
-#include &lt;stdint.h&gt;
+.PHONY: clean
+clean:
+	@rm -rvf *.d *.elf *.o
 
-void     encoder_setup(void);
-uint32_t encoder_steps(void);
+main.elf: main.o twi.o
+	$(CC) $(CFLAGS) -o $@ $^
 
-#endif  // ENCODER_STEPS_ENCODER_H
-</code></pre>
-<h2 id="pinsh"><a class="header" href="#pinsh"><code>pins.h</code></a></h2>
-<pre><code class="language-cpp">// SPDX-License-Identifier: MPL-2.0
-/*
- * pins.h -- pinout
- * Copyright (C) 2025  Jacob Koziej &lt;jacobkoziej@gmail.com&gt;
- */
+%.o: %.c
+	$(CC) $(CFLAGS) -MM -MF $*.d $&lt;
+	$(CC) $(CFLAGS) -c $&lt;
 
-#ifndef ENCODER_STEPS_PINS_H
-#define ENCODER_STEPS_PINS_H
-
-#include &lt;stdint.h&gt;
-
-const static uint8_t PIN_ENCODER_CHANNEL_A = 2;
-const static uint8_t PIN_ENCODER_CHANNEL_B = 3;
-
-#endif  // ENCODER_STEPS_PINS_H
+-include $(wildcard *.d)
 </code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../solutions/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../solutions/encoder-steps.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../solutions/mpu-6050-driver.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../solutions/scrolling-quad-seven-segment-display.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -313,11 +674,11 @@ const static uint8_t PIN_ENCODER_CHANNEL_B = 3;
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../solutions/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../solutions/encoder-steps.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../solutions/mpu-6050-driver.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../solutions/scrolling-quad-seven-segment-display.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
