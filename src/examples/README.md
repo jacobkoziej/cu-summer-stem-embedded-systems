@@ -8,3 +8,4 @@
 - [State Machine](state-machine.md)
 - [Timer Delay](timer-delay.md)
 - [Ultrasonic Interrupt](ultrasonic-interrupt.md)
+- [WS2812B Driver](ws2812b-driver.md)

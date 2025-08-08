@@ -30,6 +30,7 @@
   - [State Machine](examples/state-machine.md)
   - [Timer Delay](examples/timer-delay.md)
   - [Ultrasonic Interrupt](examples/ultrasonic-interrupt.md)
+  - [WS2812B Driver](examples/ws2812b-driver.md)
 - [Bug Hall of Fame](bug-hall-of-fame/README.md)
   - [Static Initialization](bug-hall-of-fame/static-initialization.md)
 - [How-tos](how-tos/README.md)
